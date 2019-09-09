@@ -73,6 +73,45 @@ TVector<ValType> TVector<ValType>::operator+(ValType num)
 template<class ValType>
 TVector<ValType> TVector<ValType>::operator-(ValType num)
 {
+	TVector<ValType> Vector(size, StartIndex);
+	for (int i = 0; i < size; i++)
+		Vector.elem[i] = elem[i] - num;
+	return Vector;
+}
 
+template<class ValType>
+TVector<ValType> TVector<ValType>::operator*(ValType num)
+{
+	TVector<ValType> Vector(size, StartIndex);
+	for (int i = 0; i < size; i++)
+		Vector.elem[i] = elem[i] * num;
+	return Vector;
+}
+
+template<class ValType>
+TVector<ValType> TVector<ValType>::operator+(const TVector& tmp)
+{
+	TVector Vector(size, StartIndex);
+	for (int i = 0; i < size; i++)
+		Vector.elem[i] = elem[i] + tmp.elem[i];
+	return Vector;
+}
+
+template<class ValType>
+TVector<ValType> TVector<ValType>::operator-(const TVector& tmp)
+{
+	TVector Vector(size, StartIndex);
+	for (int i = 0; i < size; i++)
+		Vector.elem[i] = elem[i] - tmp.elem[i];
+	return Vector;
+}
+
+template<class ValType>
+ValType TVector<ValType>::operator*(const TVector& tmp)
+{
+	ValType res = 0;
+	for (int i = 0; i < size; i++)
+		res = res + elem[i] * tmp.elem[i];
+	return res;
 }
 #endif
