@@ -67,15 +67,42 @@ void main()
     cout << "  B = \n" << m2 << endl;
     cout << "  C = \n" << m3 << endl;
 
-    //cout << "\n  A * 2 = " << (m1 * 2) << endl;
-    cout << "\n  A + 2 = ";
-        m2 = (m1 + 2);
-        cout << m2 << endl;
+    cout << "\n  A * 2 = " << (m1 * 2) << endl;
+    cout << "\n  A + 2 = " << (m1 + 2) << endl;
+    cout << "\n  A - 2 = " << (m1 - 2) << endl;
+    cout << "\n  A * B = " << (m1 * m2) << endl;
+    cout << "\n  A - B = " << (m1 - m2) << endl;
+    cout << "\n  A + B = " << (m1 + m2) << endl;
+    cout << "\n  A * a = " << (m1 * v1) << endl;
 
-   // cout << "\n  A - 2 = " << (m1 - 2) << endl;
-   // cout << "\n  A * B = " << (m1 * m2) << endl;
-   // cout << "\n  A - B = " << (m1 - m2) << endl;
-    //cout << "\n  A + B = " << (m1 + m2) << endl;
-    //cout << "\n  A * a = " << (m1 * v1) << endl;
+    try
+    {
+        cout << "\n  A + C = ";
+        cout << (m1 + m3) << endl;
+    }
+    catch (Exception_sizes& e)
+    {
+        cerr << e.what() << endl;
+    }
+
+    try
+    {
+        cout << "\n  A * C = ";
+        cout << (m1 * m3) << endl;
+    }
+    catch (Exception_sizes& e)
+    {
+        cerr << e.what() << endl;
+    }
+
+    try
+    {
+        cout << "\n  A * c = ";
+        cout << (m1 * v3) << endl;
+    }
+    catch (Exception_sizes& e)
+    {
+        cerr << e.what() << endl;
+    }
     cin.get();
 }

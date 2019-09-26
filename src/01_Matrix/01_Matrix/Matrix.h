@@ -20,6 +20,7 @@ public:
     virtual ~TVector();
 
     int GetSize();
+    int GetStartIndex();
     bool operator==(const TVector&) const;
     bool operator!=(const TVector&) const;
 
@@ -30,13 +31,15 @@ public:
     TVector operator+(const TVector&);
     TVector operator-(const TVector&);
     ValType operator*(const TVector&);
-    ValType Length();
+    float Length() const;
     const TVector& operator=(const TVector&);
     ValType& operator[](int);
+    const ValType& operator[](int) const;
 
     friend ostream& operator<<(ostream& os, const TVector& tmp)
     {
         string a = "  ";
+        cout << "\n";
         os << "| ";
         for (int i = 0; i < tmp.StartIndex; i++)
             cout << a;
@@ -59,8 +62,9 @@ TVector<ValType>::TVector(int s, int SI)
     elem = new ValType[s];
     size = s;
     StartIndex = SI;
-    //memset(elem, 0, sizeof(ValType) * size);
-}
+    for (int i = 0; i < size; i++)
+        elem[i] = 0;
+};
 
 template<class ValType>
 TVector<ValType>::TVector(const TVector<ValType>& tmp)
@@ -70,8 +74,9 @@ TVector<ValType>::TVector(const TVector<ValType>& tmp)
     elem = new ValType[tmp.size];
     size = tmp.size;
     StartIndex = tmp.StartIndex;
-    memcpy(elem, tmp.elem, sizeof(ValType) * size);
-}
+    for (int i = 0; i < size; i++)
+        elem[i] = tmp.elem[i];
+};
 
 template<class ValType>
 TVector<ValType>::~TVector()
@@ -80,13 +85,19 @@ TVector<ValType>::~TVector()
     StartIndex = 0;
     delete[] elem;
     elem = NULL;
-}
+};
 
 template<class ValType>
 int TVector<ValType>::GetSize()
 {
     return size;
-}
+};
+
+template<class ValType>
+int TVector<ValType>::GetStartIndex()
+{
+    return StartIndex;
+};
 
 template<class ValType>
 bool TVector<ValType>::operator==(const TVector<ValType>& tmp) const
@@ -94,13 +105,13 @@ bool TVector<ValType>::operator==(const TVector<ValType>& tmp) const
     if (size != tmp.size)
         throw Exception_sizes("Sizes are not equal!");
     return (size == tmp.size);
-}
+};
 
 template<class ValType>
 bool TVector<ValType>::operator != (const TVector<ValType>& tmp) const
 {
-    return (size != tmp.size);
-}
+    return !(tmp == *this);
+};
 
 template<class ValType>
 TVector<ValType> TVector<ValType>::operator + (ValType num)
@@ -109,7 +120,7 @@ TVector<ValType> TVector<ValType>::operator + (ValType num)
     for (int i = 0; i < size; i++)
         Vector.elem[i] = elem[i] + num;
     return Vector;
-}
+};
 
 template<class ValType>
 TVector<ValType> TVector<ValType>::operator - (ValType num)
@@ -118,7 +129,7 @@ TVector<ValType> TVector<ValType>::operator - (ValType num)
     for (int i = 0; i < size; i++)
         Vector.elem[i] = elem[i] - num;
     return Vector;
-}
+};
 
 template<class ValType>
 TVector<ValType> TVector<ValType>::operator*(ValType num)
@@ -127,7 +138,7 @@ TVector<ValType> TVector<ValType>::operator*(ValType num)
     for (int i = 0; i < size; i++)
         res.elem[i] = elem[i] * num;
     return res;
-}
+};
 
 template<class ValType>
 TVector<ValType> TVector<ValType>::operator + (const TVector& tmp)
@@ -138,7 +149,7 @@ TVector<ValType> TVector<ValType>::operator + (const TVector& tmp)
     for (int i = 0; i < size; i++)
         Vector.elem[i] = elem[i] + tmp.elem[i];
     return Vector;
-}
+};
 
 template<class ValType>
 TVector<ValType> TVector<ValType>::operator - (const TVector& tmp)
@@ -149,16 +160,16 @@ TVector<ValType> TVector<ValType>::operator - (const TVector& tmp)
     for (int i = 0; i < size; i++)
         Vector.elem[i] = elem[i] - tmp.elem[i];
     return Vector;
-}
+};
 
 template<class ValType>
-ValType TVector<ValType>::Length()
+float TVector<ValType>::Length() const
 {
     ValType res = 0;
     for (int i = 0; i < size; i++)
         res += elem[i] * elem[i];
     return sqrt(res);
-}
+};
 
 template<class ValType>
 ValType TVector<ValType>::operator*(const TVector& tmp)
@@ -169,33 +180,42 @@ ValType TVector<ValType>::operator*(const TVector& tmp)
     for (int i = 0; i < size; i++)
         res = res + elem[i] * tmp.elem[i];
     return res;
-}
+};
 
 template<class ValType>
 const TVector<ValType>& TVector<ValType>::operator = (const TVector& tmp)
 {
-    if (this == &tmp)
-        return *this;
-
+    if (this->elem == tmp.elem)
+    {
+        throw "Self - assignment";
+    }
     size = tmp.size;
     StartIndex = tmp.StartIndex;
-
     delete[] elem;
     elem = new ValType[size];
-
     for (int i = 0; i < size; i++)
+    {
         elem[i] = tmp.elem[i];
-
+    }
     return *this;
-}
+};
 
 template<class ValType>
 ValType& TVector<ValType>::operator[](int ind)
 {
-    if ((ind < 0) || (ind > size))
+    if ((ind < 0) || (ind >= size))
     {
         throw Exception_sizes("Index is not correct!");
     }
+    return elem[ind];
+};
+
+template<class ValType>
+const ValType& TVector<ValType>::operator[](int ind) const
+{
+    if ((ind < 0) || (ind >= size))
+        throw Exception_sizes("Index is not correct!");
+
     return elem[ind];
 };
 
@@ -226,7 +246,7 @@ public:
     friend ostream& operator<<(ostream& os, TMatrix& tmp)
     {
         for (int i = 0; i < tmp.size; i++)
-            os << "  " << tmp.elem[i] << endl;
+            os << "  " << tmp.elem[i];
         return os;
     };
     friend istream& operator >> (istream& is, TMatrix& tmp)
@@ -253,17 +273,17 @@ TMatrix<ValType>::TMatrix(const TMatrix& tmp) : TVector<TVector<ValType> >(tmp)
 
 template<class ValType>
 TMatrix<ValType>::TMatrix(const TVector<TVector<ValType> > & tmp) : TVector<TVector<ValType> >(tmp)
-{}
+{};
 
 template<class ValType>
 TMatrix<ValType>::~TMatrix()
-{}
+{};
 
 template<class ValType>
 int TMatrix<ValType>::GetSize()
 {
     return size;
-}
+};
 
 template<class ValType>
 bool TMatrix<ValType>::operator == (const TMatrix& tmp) const
@@ -271,13 +291,14 @@ bool TMatrix<ValType>::operator == (const TMatrix& tmp) const
     if (size != tmp.size)
         throw Exception_sizes("Sizes are not equal!");
     return (size == tmp.size);
-}
+};
 
 template<class ValType>
 bool TMatrix<ValType>::operator != (const TMatrix<ValType>& tmp) const
 {
-    return (size != tmp.size);
-}
+    return !(tmp == (*this));
+
+};
 
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator + (ValType num)
@@ -286,7 +307,7 @@ TMatrix<ValType> TMatrix<ValType>::operator + (ValType num)
     for (int i = 0; i < size; i++)
         Matrix.elem[i] = elem[i] + num;
     return Matrix;
-}
+};
 
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator - (ValType num)
@@ -295,7 +316,7 @@ TMatrix<ValType> TMatrix<ValType>::operator - (ValType num)
     for (int i = 0; i < size; i++)
         Matrix.elem[i] = elem[i] - num;
     return Matrix;
-}
+};
 
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator*(ValType num)
@@ -304,14 +325,28 @@ TMatrix<ValType> TMatrix<ValType>::operator*(ValType num)
     for (int i = 0; i < size; i++)
         Matrix.elem[i] = elem[i] * num;
     return Matrix;
-}
+};
 
 template<class ValType>
 const TMatrix<ValType>& TMatrix<ValType>::operator = (const TMatrix& tmp)
 {
-    TVector<TVector<ValType> >::operator=(tmp);
+    if (this != &tmp)
+    {
+        if (tmp.size == 0)
+            throw "Null dimension";
+        if (this->size != tmp.size)
+        {
+            this->size = tmp.size;
+            delete this->elem;
+            this->elem = new TVector<ValType>[tmp.size];
+        }
+        for (int i = 0; i < this->size; i++)
+        {
+            this->elem[i] = tmp.elem[i];
+        }
+    }
     return *this;
-}
+};
 
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator + (const TMatrix& tmp)
@@ -320,7 +355,7 @@ TMatrix<ValType> TMatrix<ValType>::operator + (const TMatrix& tmp)
     for (int i = 0; i < size; i++)
         Matrix.elem[i] = elem[i] + tmp.elem[i];
     return Matrix;
-}
+};
 
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator - (const TMatrix& tmp)
@@ -329,36 +364,34 @@ TMatrix<ValType> TMatrix<ValType>::operator - (const TMatrix& tmp)
     for (int i = 0; i < size; i++)
         Matrix.elem[i] = elem[i] - tmp.elem[i];
     return Matrix;
-}
+};
 
 template<class ValType>
 TVector<ValType> TMatrix<ValType>::operator*(const TVector<ValType>& tmp)
 {
-    if (size != tmp.GetSize)
-        throw Exception_sizes("Sizes are not equal!");
     TVector<ValType> Vector(size);
+
     for (int i = 0; i < size; i++)
-        for (int j = 0; j < size; j++)
-            Vector[i] +=
-            (elem[i * size + j] * tmp[j]);
+        for (int j = 0; j < elem[i].GetSize(); j++)
+            Vector[i] += elem[i][j] * tmp[i + j];
+
     return Vector;
-}
+};
 
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator*(const TMatrix& tmp)
 {
     if (size != tmp.size)
-    {
         throw Exception_sizes("Sizes are not equal!");
-    }
 
     TMatrix<ValType> Matrix(size);
+
     for (int i = 0; i < size; i++)
-        for (int j = 0; j < size; i++)
-            Matrix.elem[i * size + j] = Matrix.elem[i * size + j] +
-            (elem[i * size + j] * tmp.elem[i * size + j]);
+        for (int j = elem[i].GetStartIndex(); j < size; j++)
+            for (int k = i; k <= j; k++)
+                Matrix.elem[i][j - i] += elem[i][k - i] * tmp.elem[k][j - k];
     return Matrix;
-}
+};
 
 //Exceptions
 class Exception_sizes : exception
