@@ -59,12 +59,14 @@ TVector<ValType>::TVector(int s, int SI)
     elem = new ValType[s];
     size = s;
     StartIndex = SI;
-    memset(elem, 0, sizeof(ValType) * size);
+    //memset(elem, 0, sizeof(ValType) * size);
 }
 
 template<class ValType>
 TVector<ValType>::TVector(const TVector<ValType>& tmp)
 {
+    if (tmp.size <= 0)
+        throw "Inccorect size";
     elem = new ValType[tmp.size];
     size = tmp.size;
     StartIndex = tmp.StartIndex;
@@ -77,7 +79,7 @@ TVector<ValType>::~TVector()
     size = 0;
     StartIndex = 0;
     delete[] elem;
-    //elem = NULL;
+    elem = NULL;
 }
 
 template<class ValType>
@@ -233,6 +235,7 @@ public:
             is >> tmp.elem[i];
         return is;
     };
+
 };
 
 template<class ValType>
@@ -313,7 +316,7 @@ const TMatrix<ValType>& TMatrix<ValType>::operator = (const TMatrix& tmp)
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator + (const TMatrix& tmp)
 {
-    TMatrix<ValType> Matrix(size, StartIndex);
+    TMatrix<ValType> Matrix(size);
     for (int i = 0; i < size; i++)
         Matrix.elem[i] = elem[i] + tmp.elem[i];
     return Matrix;
@@ -322,7 +325,7 @@ TMatrix<ValType> TMatrix<ValType>::operator + (const TMatrix& tmp)
 template<class ValType>
 TMatrix<ValType> TMatrix<ValType>::operator - (const TMatrix& tmp)
 {
-    TMatrix<ValType> Matrix(size, StartIndex);
+    TMatrix<ValType> Matrix(size);
     for (int i = 0; i < size; i++)
         Matrix.elem[i] = elem[i] - tmp.elem[i];
     return Matrix;

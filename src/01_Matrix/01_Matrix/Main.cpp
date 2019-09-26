@@ -1,6 +1,6 @@
 #include <iostream>
-//#include <conio.h>
-//#include <iomanip>
+#include <conio.h>
+#include <stdlib.h>
 #include "Matrix.h"
 #include <ctime>
 using namespace std;
@@ -67,12 +67,15 @@ void main()
     cout << "  B = \n" << m2 << endl;
     cout << "  C = \n" << m3 << endl;
 
-    cout << "\n  A * 2 = " << (m1 * 2) << endl;
-    cout << "\n  A + 2 = " << (m1 + 2) << endl;
-    cout << "\n  A - 2 = " << (m1 - 2) << endl;
-   /* cout << "\n  A * B = " << (m1 * m2) << endl;
-    cout << "\n  A - B = " << (m1 - m2) << endl;
-    cout << "\n  A + B = " << (m1 + m2) << endl;
-    cout << "\n  A * a = " << (m1 * v1) << endl;*/
+    //cout << "\n  A * 2 = " << (m1 * 2) << endl;
+    cout << "\n  A + 2 = ";
+        m2 = (m1 + 2);
+        cout << m2 << endl;
+
+   // cout << "\n  A - 2 = " << (m1 - 2) << endl;
+   // cout << "\n  A * B = " << (m1 * m2) << endl;
+   // cout << "\n  A - B = " << (m1 - m2) << endl;
+    //cout << "\n  A + B = " << (m1 + m2) << endl;
+    //cout << "\n  A * a = " << (m1 * v1) << endl;
     cin.get();
 }
