@@ -10,7 +10,7 @@ void main()
     TMatrix<int> m1(5), m2(5), m3(3);
     TVector<int> v1(5, 0), v2(5, 0), v3(3, 0);
     int i = 0, j = 0;
-    srand(time(0));
+    srand((unsigned int)time(NULL));
 
     cout << "    -Vector TEST- \n" << endl;
         for (i = 0; i < v1.GetSize(); i++)
@@ -104,5 +104,6 @@ void main()
     {
         cerr << e.what() << endl;
     }
+
     cin.get();
 }
