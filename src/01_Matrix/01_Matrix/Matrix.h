@@ -107,7 +107,7 @@ bool TVector<ValType>::operator==(const TVector<ValType>& tmp) const
     for (int i = 0; i < size; i++)
         if (elem[i] != tmp.elem[i])
             return false;
-    return 1;
+    return true;
 };
 
 template<class ValType>
@@ -287,7 +287,7 @@ template<class ValType>
 bool TMatrix<ValType>::operator == (const TMatrix& tmp) const
 {
     if (size != tmp.size)
-        throw Exception_sizes("Sizes are not equal!");
+        return false;
 
     for (int i = 0; i < size; i++)
         if (elem[i] != tmp.elem[i])
