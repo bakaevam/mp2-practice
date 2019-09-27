@@ -55,8 +55,8 @@ void main()
     for (i = 0; i < m1.GetSize(); i++)
         for (j = 0; j < m1.GetSize() - i; j++)
         {
-            m1[i][j] = rand() % 9 + 1;
-            m2[i][j] = rand() % 9 + 1;
+            m1[i][j] = rand() % 4 + 1;
+            m2[i][j] = rand() % 4 + 1;
         };
     for (i = 0; i < m3.GetSize(); i++)
         for (j = 0; j < m3.GetSize() - i; j++)

@@ -19,8 +19,8 @@ public:
     TVector(const TVector&);
     virtual ~TVector();
 
-    int GetSize();
-    int GetStartIndex();
+    int GetSize() const;
+    int GetStartIndex() const;
     bool operator==(const TVector&) const;
     bool operator!=(const TVector&) const;
 
@@ -31,6 +31,7 @@ public:
     TVector operator+(const TVector&);
     TVector operator-(const TVector&);
     ValType operator*(const TVector&);
+	double Scalar(TVector&) const;
     double Length() const;
     const TVector& operator=(const TVector&);
     ValType& operator[](int);
@@ -69,8 +70,6 @@ TVector<ValType>::TVector(int s, int SI)
 template<class ValType>
 TVector<ValType>::TVector(const TVector<ValType>& tmp)
 {
-    if (tmp.size <= 0)
-        throw Exception_sizes("Sizes are not equal!");
     elem = new ValType[tmp.size];
     size = tmp.size;
     StartIndex = tmp.StartIndex;
@@ -88,13 +87,13 @@ TVector<ValType>::~TVector()
 };
 
 template<class ValType>
-int TVector<ValType>::GetSize()
+int TVector<ValType>::GetSize() const
 {
     return size;
 };
 
 template<class ValType>
-int TVector<ValType>::GetStartIndex()
+int TVector<ValType>::GetStartIndex() const
 {
     return StartIndex;
 };
@@ -104,6 +103,8 @@ bool TVector<ValType>::operator==(const TVector<ValType>& tmp) const
 {
     if (size != tmp.size)
         return false;
+	if (StartIndex != tmp.StartIndex)
+		return false;
     for (int i = 0; i < size; i++)
         if (elem[i] != tmp.elem[i])
             return false;
@@ -148,6 +149,8 @@ TVector<ValType> TVector<ValType>::operator + (const TVector& tmp)
 {
     if (size != tmp.size)
         throw Exception_sizes("Sizes are not equal!");
+	if (StartIndex != tmp.StartIndex)
+		throw Exception_sizes("Indexes are not equal!");
     TVector<ValType> Vector(size, StartIndex);
     for (int i = 0; i < size; i++)
         Vector.elem[i] = elem[i] + tmp.elem[i];
@@ -159,6 +162,8 @@ TVector<ValType> TVector<ValType>::operator - (const TVector& tmp)
 {
     if (size != tmp.size)
         throw Exception_sizes("Sizes are not equal!");
+	if (StartIndex != tmp.StartIndex)
+		throw Exception_sizes("Indexes are not equal!");
     TVector<ValType> Vector(size, StartIndex);
     for (int i = 0; i < size; i++)
         Vector.elem[i] = elem[i] - tmp.elem[i];
@@ -166,12 +171,19 @@ TVector<ValType> TVector<ValType>::operator - (const TVector& tmp)
 };
 
 template<class ValType>
+double TVector<ValType>::Scalar(TVector& tmp) const
+{
+	double res = 0;
+	for (int i = 0; i < size; i++)
+		res += this->[i] * this->[i]; // Scalar
+	return res;
+};
+
+template<class ValType>
 double TVector<ValType>::Length() const
 {
-    double res = 0;
-    for (int i = 0; i < size; i++)
-        res += elem[i] * elem[i];
-    return sqrt(res);
+
+    return sqrt(this->Scalar(*this));
 };
 
 template<class ValType>
@@ -181,24 +193,26 @@ ValType TVector<ValType>::operator*(const TVector& tmp)
         throw Exception_sizes("Sizes are not equal!");
     ValType res = 0;
     for (int i = 0; i < size; i++)
-        res = res + elem[i] * tmp.elem[i];
+        res += elem[i] * tmp.elem[i];
     return res;
 };
 
 template<class ValType>
 const TVector<ValType>& TVector<ValType>::operator = (const TVector& tmp)
 {
-    if (elem == tmp.elem)
+    if (this == &tmp)
         return *this;
 
-    size = tmp.size;
-    StartIndex = tmp.StartIndex;
-    delete[] elem;
+		if (size != tmp.size)
+		{
+			size = tmp.size;
+			delete elem;
+			elem = new ValType[tmp.size];
+		}
+		for (int i = 0; i < size; i++)
+			elem[i] = tmp.elem[i];
+	return *this;
 
-    elem = new ValType[size];
-    for (int i = 0; i < size; i++)
-        elem[i] = tmp.elem[i];
-    return *this;
 };
 
 template<class ValType>
@@ -288,7 +302,8 @@ bool TMatrix<ValType>::operator == (const TMatrix& tmp) const
 {
     if (size != tmp.size)
         return false;
-
+	if (StartIndex != tmp.StartIndex)
+		return false;
     for (int i = 0; i < size; i++)
         if (elem[i] != tmp.elem[i])
             return false;
