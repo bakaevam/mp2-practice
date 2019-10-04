@@ -43,7 +43,6 @@ public:
             os << "  ";
         for (int i = 0; i < tmp.size; i++)
         {
-            os << " ";
             os << tmp.elem[i] << " ";
         }
         return os;
@@ -203,6 +202,7 @@ const TVector<ValType>& TVector<ValType>::operator = (const TVector& tmp)
 			delete elem;
 			elem = new ValType[tmp.size];
 		}
+		StartIndex = tmp.StartIndex;
 		for (int i = 0; i < size; i++)
 			elem[i] = tmp.elem[i];
 	return *this;
