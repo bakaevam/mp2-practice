@@ -1,8 +1,11 @@
-#include "Stack.h"
+/*#include "Stack.h"
 #include <cmath>
 #include <cstring>
 #include <iostream>
 using namespace std;
+
+char* PostfixForm(char* );
+bool SignComparison(char , Stack<char>& );
 
 bool SignComparison(char tmp, Stack<char>& _sign)
 {
@@ -63,6 +66,7 @@ bool SignComparison(char tmp, Stack<char>& _sign)
     if ((_sign.elem[_sign.top - 1] == '(') && (tmp == '('))
         return true;
 
+    return false;
 };
 
 char* PostfixForm(char* exp)
@@ -105,4 +109,4 @@ char* PostfixForm(char* exp)
         Operands.Push(Sign.Pop());
     cout << "/n" << Operands << endl;
     return Operands.elem;
-};
+};*/
