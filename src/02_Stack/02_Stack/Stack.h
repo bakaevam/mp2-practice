@@ -147,9 +147,7 @@ char* PostfixForm(char* exp, int &S)
                 Sign.Push(_exp[i]);
             }
             else
-            {
                 Sign.Push(_exp[i]);
-            };
         }
 
         if (_exp[i] == '(')

@@ -255,6 +255,8 @@ public:
     {
         for (int i = 0; i < tmp.GetSize(); i++)
         {
+            for (int j = 0; j < tmp.StartIndex; j++)
+                os << "\n   ";
             os << tmp.elem[i];
         }
         return os;
