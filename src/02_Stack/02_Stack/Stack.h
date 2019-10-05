@@ -2,6 +2,7 @@
 #define _STACK_H_
 #include <iostream>
 #include <exception>
+#include <cstdio>
 using namespace std;
 
 template<class ValType>
@@ -21,13 +22,12 @@ public:
     bool IsEmpty() const;
     bool IsFull() const;
     ValType& operator[](int);
-    const ValType& operator[](int) const;
     int GetTop() const;
 
     friend ostream& operator<<(ostream& os, const Stack& tmp)
     {
-        for (int i = 0; i < tmp.size; i++)
-            os << tmp.elem[i] << " ";
+        for (int i = 0; i < tmp.top; i++)
+            os << tmp.elem[i];
         return os;
     };
 };
@@ -46,7 +46,8 @@ Stack<ValType>::Stack(const Stack& tmp)
     size = tmp.size;
     top = tmp.top;
     elem = new ValType[size];
-    memcpy(elem, tmp.elem, sizeof(Valtype) * size);
+    for (int i = 0; i < size; i++)
+        elem[i] = tmp.elem[i];
 };
 
 template<class ValType>
@@ -99,101 +100,60 @@ ValType& Stack<ValType>::operator[](int ind)
 };
 
 template<class ValType>
-const ValType& Stack<ValType>::operator[](int ind) const
-{
-    if ((ind < 0) || (ind >= size))
-        throw "Index is not correct!";
-
-    return elem[ind];
-};
-
-template<class ValType>
 int Stack<ValType>::GetTop() const
 {
     return top;
 };
 
 
-char* PostfixForm(char*);
-bool SignComparison(char, Stack<char>&);
+int Priority(char sign)
+{
+    switch (sign)
+    {
+    case '*' : return 1;
+    case '/' : return 1;
+    case '+' : return 2;
+    case '-' : return 2;
+    default: return 4;
+    }
+}
 
 bool SignComparison(char tmp, Stack<char>& _sign)
 {
     // true - перемещаем всё в другой стек
     //false - не перемещаем
-    if ((_sign.elem[_sign.top - 1] == '*') && (tmp == '*'))
+    if (Priority(_sign.elem[_sign.top - 1]) < Priority(tmp))
         return true;
-    if ((_sign.elem[_sign.top - 1] == '*') && (tmp == '/'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '*') && (tmp == '+'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '*') && (tmp == '-'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '*') && (tmp == '('))
-        return true;
-
-    if ((_sign.elem[_sign.top - 1] == '/') && (tmp == '/'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '/') && (tmp == '*'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '/') && (tmp == '+'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '/') && (tmp == '-'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '/') && (tmp == '('))
-        return true;
-
-    if ((_sign.elem[_sign.top - 1] == '+') && (tmp == '*'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '+') && (tmp == '/'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '+') && (tmp == '+'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '+') && (tmp == '-'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '+') && (tmp == '('))
-        return true;
-
-    if ((_sign.elem[_sign.top - 1] == '-') && (tmp == '*'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '-') && (tmp == '/'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '-') && (tmp == '+'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '-') && (tmp == '-'))
-        return true;
-    if ((_sign.elem[_sign.top - 1] == '-') && (tmp == '('))
-        return true;
-
-    if ((_sign.elem[_sign.top - 1] == '(') && (tmp == '*'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '(') && (tmp == '/'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '(') && (tmp == '+'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '(') && (tmp == '-'))
-        return false;
-    if ((_sign.elem[_sign.top - 1] == '(') && (tmp == '('))
-        return true;
-
-    return false;
+    else return false;
 };
 
-char* PostfixForm(char* exp)
+char* PostfixForm(char* exp, int &S)
 {
-    Stack<char> Sign(10), Operands(10);
+    Stack<char> Sign(25), Operands(25);
     const char* _exp = exp;
-    char _size = sizeof(exp);
+    char _size = strlen(exp);
 
     for (int i = 0; i < _size; i++)
     {
         //Если пришел знак
         if ((_exp[i] == '*') || (_exp[i] == '/') ||
-            (_exp[i] == '+') || (_exp[i] == '-') || (_exp[i] == '('))
+            (_exp[i] == '+') || (_exp[i] == '-'))
         {
-            if (SignComparison(_exp[i], Sign)) // функция сравнения знака на вершне и приходящего знака
+            if (SignComparison(_exp[i], Sign)) // функция сравнения знака на вершине 
+                //и приходящего знака
+            {
+                while (Sign.top != 0)
+                    Operands.Push(Sign.Pop());
                 Sign.Push(_exp[i]);
+            }
+            else
+            {
+                Sign.Push(_exp[i]);
+            };
         }
+
+        if (_exp[i] == '(')
+            Sign.Push(_exp[i]);
 
         //Если пришла буква
         if (isalpha(_exp[i]))
@@ -201,23 +161,57 @@ char* PostfixForm(char* exp)
 
         //Если пришла ')'
         if (_exp[i] == ')')
-        {
-            int j = 0;
-            do {
-                if (Sign.GetTop() != '(')
+            while (Sign.top != 0)
+            {
+                if (Sign.elem[Sign.top - 1] != '(')
                     Operands.Push(Sign.Pop());
-                if (Sign.elem[Sign.GetTop() - 1] == '(')
+                else
                 {
                     Sign.Pop();
                     break;
                 }
-            } while (Sign.elem[Sign.GetTop() - 1] != '(');
-        }
+            }
     };
     //Дошли до конца
     while (!Sign.IsEmpty())
         Operands.Push(Sign.Pop());
-    cout << "/n" << Operands << endl;
+    cout << "\n  Postfix Form: " << Operands << endl;
+
+    S = Operands.top; // Длина постфиксной формы
     return Operands.elem;
 };
+
+float CountingValue(char* PostForm, int S)
+{
+    cout << PostForm;
+    Stack<float> numbers(25);
+    Stack<char> letters(25);
+    const char* _PostForm = PostForm;
+    char _size = S;
+    float a = 0, b = 0;
+    float count = 0;
+
+    for (int i = 0; i < _size; i++)
+    {
+        if (isalpha(PostForm[i]))
+        {
+            letters[i] = _PostForm[i];
+            cout << "\n  " << letters[i] << " = ";
+            cin >> numbers[i];
+        }
+        if ((_PostForm[i] == '*') || (_PostForm[i] == '/') ||
+            (_PostForm[i] == '+') || (_PostForm[i] == '-'))
+        {
+            a = numbers.Pop();
+            b = numbers.Pop();
+            if (_PostForm[i] == '*') count = b * a;
+            if (_PostForm[i] == '/') count = b / a;
+            if (_PostForm[i] == '+') count = b + a;
+            if (_PostForm[i] == '-') count = b - a;
+            numbers.Push(count);
+        }
+    }
+    return numbers.elem[numbers.top - 1];
+}
+
 #endif
