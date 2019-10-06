@@ -38,6 +38,8 @@ Stack<ValType>::Stack(int max)
     size = max;
     top = 0;
     elem = new ValType[size];
+    for (int i = 0; i < size; i++)
+        elem[i] = 0;
 };
 
 template<class ValType>
@@ -173,43 +175,79 @@ char* PostfixForm(char* exp, int &S)
     //Дошли до конца
     while (!Sign.IsEmpty())
         Operands.Push(Sign.Pop());
-    cout << "\n  Postfix Form: " << Operands << endl;
+    char tmp[25];
+    for (int i = 0; i < Operands.size; i++)
+        tmp[i] = Operands.elem[i];
+    cout << "\n  Postfix Form: " << tmp << endl;
 
     S = Operands.top; // Длина постфиксной формы
-    return Operands.elem;
+    return tmp;
 };
 
-float CountingValue(char* PostForm, int S)
+float CountingValue(char PostForm[], int S)
 {
-    cout << PostForm;
+    int Post[25];
+    for (int i = 0; i < S; i++)
+        Post[i] = PostForm[i];
+
     Stack<float> numbers(25);
     Stack<char> letters(25);
-    const char* _PostForm = PostForm;
     char _size = S;
     float a = 0, b = 0;
     float count = 0;
 
     for (int i = 0; i < _size; i++)
     {
-        if (isalpha(PostForm[i]))
+        int flag = 0;
+        int j = 0;
+        if (isalpha(Post[i]))
         {
-            letters[i] = _PostForm[i];
-            cout << "\n  " << letters[i] << " = ";
-            cin >> numbers[i];
+            for (j = 0; j < letters.top; j++)
+                if (letters[j] == Post[i])
+                {
+                    flag = 1;
+                    break;
+                }
+            if (flag == 0)
+            {
+                letters.Push(Post[i]);
+                cout << "\n  " << letters[letters.top - 1] << " = ";
+                cin >> a;
+                numbers.Push(a);
+            }
+            else numbers.Push(numbers.elem[j]);
         }
-        if ((_PostForm[i] == '*') || (_PostForm[i] == '/') ||
-            (_PostForm[i] == '+') || (_PostForm[i] == '-'))
+        if ((Post[i] == '*') || (Post[i] == '/') ||
+            (Post[i] == '+') || (Post[i] == '-'))
         {
             a = numbers.Pop();
             b = numbers.Pop();
-            if (_PostForm[i] == '*') count = b * a;
-            if (_PostForm[i] == '/') count = b / a;
-            if (_PostForm[i] == '+') count = b + a;
-            if (_PostForm[i] == '-') count = b - a;
+            if (Post[i] == '*') count = b * a;
+            if (Post[i] == '+') count = b + a;
+            if (Post[i] == '-') count = b - a;
+            if (Post[i] == '/')
+            {
+                if (a == 0)
+                  //  throw Exception_errors("  You mustn't divide by 0");
+                count = b / a;
+            }
             numbers.Push(count);
         }
     }
     return numbers.elem[numbers.top - 1];
 }
+
+//Exceptions
+class Exception_errors : exception
+{
+private:
+    const string mes;
+public:
+    Exception_errors(string e)
+        :mes(e)
+    {
+    }
+    const char* what() const { return mes.c_str(); }
+};
 
 #endif
