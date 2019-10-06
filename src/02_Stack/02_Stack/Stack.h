@@ -141,8 +141,7 @@ char* PostfixForm(char* exp, int &S)
         if ((_exp[i] == '*') || (_exp[i] == '/') ||
             (_exp[i] == '+') || (_exp[i] == '-'))
         {
-            if (SignComparison(_exp[i], Sign)) // функция сравнения знака на вершине 
-                //и приходящего знака
+            if (SignComparison(_exp[i], Sign)) // функция сравнения знака на вершине и приходящего знака
             {
                 while (Sign.top != 0)
                     Operands.Push(Sign.Pop());
