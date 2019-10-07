@@ -141,6 +141,9 @@ char* PostfixForm(char* exp, int &S)
         if ((_exp[i] == '*') || (_exp[i] == '/') ||
             (_exp[i] == '+') || (_exp[i] == '-'))
         {
+            if ((Operands.elem[Operands.top - 1] == _exp[i]) ||
+                (Sign.elem[Sign.top - 1] == _exp[i]))
+                continue;
             if (SignComparison(_exp[i], Sign)) // функция сравнения знака на вершине и приходящего знака
             {
                 while (Sign.top != 0)
@@ -167,7 +170,6 @@ char* PostfixForm(char* exp, int &S)
                 else
                 {
                     Sign.Pop();
-                    break;
                 }
             }
     };
@@ -185,55 +187,55 @@ char* PostfixForm(char* exp, int &S)
 
 float CountingValue(char PostForm[], int S)
 {
-    int Post[25];
+    char Post[25];
     for (int i = 0; i < S; i++)
         Post[i] = PostForm[i];
-
-    Stack<float> numbers(25);
-    Stack<char> letters(25);
     char _size = S;
-    float a = 0, b = 0;
-    float count = 0;
+    char letters[25];
+    int numbers[25];
+    Stack<int> Value(25);
+    int topLetters = 0;
 
-    for (int i = 0; i < _size; i++)
-    {
-        int flag = 0;
-        int j = 0;
+    //Заполнение массива значений
+    for(int i = 0; i < S; i++)
         if (isalpha(Post[i]))
         {
-            for (j = 0; j < letters.top; j++)
+            int flag = 0;
+            for (int j = 0; j < topLetters; j++)
                 if (letters[j] == Post[i])
                 {
                     flag = 1;
                     break;
                 }
-            if (flag == 0)
-            {
-                letters.Push(Post[i]);
-                cout << "\n  " << letters[letters.top - 1] << " = ";
-                cin >> a;
-                numbers.Push(a);
-            }
-            else numbers.Push(numbers.elem[j]);
+                if(flag == 0)
+                {
+                    letters[topLetters] = Post[i];
+                    cout << "\n  " << letters[topLetters] << " = ";
+                    cin >> numbers[topLetters++];
+                }
         }
+
+    //Чтение постфиксной записи
+    for (int i = 0; i < S; i++)
+    {
+        if(isalpha(Post[i]))
+            for(int j = 0; j < topLetters; j++)
+                if (letters[j] == Post[i])
+                {
+                    Value.Push(numbers[j]);
+                }
         if ((Post[i] == '*') || (Post[i] == '/') ||
             (Post[i] == '+') || (Post[i] == '-'))
         {
-            a = numbers.Pop();
-            b = numbers.Pop();
-            if (Post[i] == '*') count = b * a;
-            if (Post[i] == '+') count = b + a;
-            if (Post[i] == '-') count = b - a;
-            if (Post[i] == '/')
-            {
-                if (a == 0)
-                  //  throw Exception_errors("  You mustn't divide by 0");
-                count = b / a;
-            }
-            numbers.Push(count);
+            int a = Value.Pop();
+            int b = Value.Pop();
+            if (Post[i] == '*') Value.Push(b * a);
+            if (Post[i] == '/') Value.Push(b / a);
+            if (Post[i] == '+') Value.Push(b + a);
+            if (Post[i] == '-') Value.Push(b - a);
         }
     }
-    return numbers.elem[numbers.top - 1];
+    return Value.Pop();
 }
 
 //Exceptions
