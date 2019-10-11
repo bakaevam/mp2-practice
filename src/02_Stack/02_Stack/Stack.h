@@ -107,7 +107,7 @@ int Stack<ValType>::GetTop() const
     return top;
 };
 
-
+/////////////////////////////////////////////
 int Priority(char sign)
 {
     switch (sign)
@@ -116,7 +116,7 @@ int Priority(char sign)
     case '/' : return 1;
     case '+' : return 2;
     case '-' : return 2;
-    default: return 4;
+    default: return 3;
     }
 }
 
@@ -141,6 +141,7 @@ char* PostfixForm(char* exp, int &S)
         if ((_exp[i] == '*') || (_exp[i] == '/') ||
             (_exp[i] == '+') || (_exp[i] == '-'))
         {
+            //Проверка на повторяющийся знак
             if ((Operands.elem[Operands.top - 1] == _exp[i]) ||
                 (Sign.elem[Sign.top - 1] == _exp[i]))
                 continue;
@@ -173,6 +174,7 @@ char* PostfixForm(char* exp, int &S)
                 }
             }
     };
+
     //Дошли до конца
     while (!Sign.IsEmpty())
         Operands.Push(Sign.Pop());
@@ -236,7 +238,7 @@ float CountingValue(char PostForm[], int S)
         }
     }
     return Value.Pop();
-}
+};
 
 //Exceptions
 class Exception_errors : exception

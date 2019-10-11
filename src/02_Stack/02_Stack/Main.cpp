@@ -6,13 +6,25 @@ using namespace std;
 
 void main()
 {
+    char* post;
     int S = 0;
     float amount = 0;
     char* strUser = new char[100];
-    cout << " Enter the arithmetick string: ";
+
+    cout << "  +------------------------------------+\n";
+    cout << "  |\t      -POSTFIX NOTATION-       |\n";
+    cout << "  +------------------------------------+\n";
+    cout << "\n  Enter the arithmetick string: ";
     cin.getline(strUser, 100);
     char tmp[25];
-    char* post = PostfixForm(strUser, S);
+    try
+    {
+        post = PostfixForm(strUser, S);
+    }
+    catch (Exception_errors& e)
+    {
+        cerr << e.what() << endl;
+    };
     for(int i = 0; i < S; i++)
         tmp[i] = post[i]; 
     try
