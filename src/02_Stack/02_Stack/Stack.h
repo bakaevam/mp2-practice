@@ -21,15 +21,6 @@ public:
     ValType Pop();
     bool IsEmpty() const;
     bool IsFull() const;
-    ValType& operator[](int);
-    int GetTop() const;
-
-    friend ostream& operator<<(ostream& os, const Stack& tmp)
-    {
-        for (int i = 0; i < tmp.top; i++)
-            os << tmp.elem[i];
-        return os;
-    };
 };
 
 template<class ValType>
@@ -92,20 +83,6 @@ bool Stack<ValType>::IsFull() const
     return false;
 };
 
-template<class ValType>
-ValType& Stack<ValType>::operator[](int ind)
-{
-    if ((ind < 0) || (ind >= size))
-        throw "Index is not correct!";
-
-    return elem[ind];
-};
-
-template<class ValType>
-int Stack<ValType>::GetTop() const
-{
-    return top;
-};
 
 /////////////////////////////////////////////
 int Priority(char sign)

@@ -17,14 +17,8 @@ void main()
     cout << "\n  Enter the arithmetick string: ";
     cin.getline(strUser, 100);
     char tmp[25];
-    try
-    {
-        post = PostfixForm(strUser, S);
-    }
-    catch (Exception_errors& e)
-    {
-        cerr << e.what() << endl;
-    };
+	post = PostfixForm(strUser, S);
+
     for(int i = 0; i < S; i++)
         tmp[i] = post[i]; 
     try
