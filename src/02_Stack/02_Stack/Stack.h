@@ -6,7 +6,7 @@ using namespace std;
 template<class ValType>
 class Stack
 {
-public:
+private:
     int size;
     int top;
     ValType* elem;
@@ -16,7 +16,8 @@ public:
     ~Stack();
 
     void Push(ValType);
-    ValType Pop();
+    ValType TopPop() const;
+	void Pop();
     bool IsEmpty() const;
     bool IsFull() const;
 };
@@ -58,11 +59,19 @@ void Stack<ValType>::Push(ValType num)
 };
 
 template<class ValType>
-ValType Stack<ValType>::Pop()
+ValType Stack<ValType>::TopPop() const
 {
     if (IsEmpty())
         throw Exception_errors("  Stack is empty");
-    return elem[--top];
+    return elem[top - 1];
+};
+
+template<class ValType>
+void Stack<ValType>::Pop()
+{
+	if (IsEmpty())
+		throw Exception_errors("  Stack is empty");
+	top--;
 };
 
 template<class ValType>

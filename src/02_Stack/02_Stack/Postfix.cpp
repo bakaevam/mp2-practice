@@ -20,10 +20,10 @@ int Postfix::Priority(char sign)
 bool Postfix::SignComparison(char tmp, Stack<char>& _sign)
 {
     // true - перемещаем всё в другой стек
-    //false - не перемещаем
-    if (Priority(_sign.elem[_sign.top - 1]) < Priority(tmp))
+    if (Priority(_sign.TopPop()) < Priority(tmp))
         return true;
-    else return false;
+   
+	return false;
 };
 
 string Postfix::PostfixForm(string exp)
@@ -41,10 +41,17 @@ string Postfix::PostfixForm(string exp)
             //Проверка на пробел
             if (exp[i] == ' ')
                 continue;
+			if (Sign.IsEmpty())
+			{
+				Sign.Push(exp[i]);
+				continue;
+			}
+
             if (SignComparison(exp[i], Sign)) // функция сравнения знака на вершине и приходящего знака
             {
-                while (Sign.top != 0)
-                    Operands.Push(Sign.Pop());
+                while (!Sign.IsEmpty())
+                    Operands.Push(Sign.TopPop());
+				Sign.Pop();
                 Sign.Push(exp[i]);
             }
             else
@@ -59,24 +66,42 @@ string Postfix::PostfixForm(string exp)
             Operands.Push(exp[i]);
 
         //Если пришла ')'
-        if (exp[i] == ')')
-            while (Sign.top != 0)
-            {
-                if (Sign.elem[Sign.top - 1] != '(')
-                    Operands.Push(Sign.Pop());
-                else
-                {
-                    Sign.Pop();
-                }
-            }
+		if (exp[i] == ')')
+		{
+			int flag = 0;
+			while (!Sign.IsEmpty())
+			{
+				if (Sign.TopPop() != '(')
+				{
+					Operands.Push(Sign.TopPop());
+					Sign.Pop();
+					continue;
+				}
+				Sign.Pop();
+				flag = 1;
+				break;
+			};
+			if ((Sign.IsEmpty()) && (flag != 1))
+				throw Exception_errors("  Didn't find '('");
+		};
     };
 
     //Дошли до конца
-    while (!Sign.IsEmpty())
-        Operands.Push(Sign.Pop());
+	while (!Sign.IsEmpty())
+	{
+		Operands.Push(Sign.TopPop());
+		Sign.Pop();
+	}
     string tmp;
-    tmp.assign(Operands.elem);
-    cout << "\n  Postfix Form: " << Operands.elem << endl;
+	while (!Operands.IsEmpty())
+	{
+		tmp += Operands.TopPop();
+		Operands.Pop();
+	}
+
+	for (int i = 0; i < tmp.length() / 2; i++)
+			swap(tmp[i], tmp[tmp.length() - 1 - i]);
+
     return tmp;
 };
 
@@ -135,8 +160,11 @@ float Postfix::CountingValue(string PostForm, string Letters, float* Numbers)
         if ((PostForm[i] == '*') || (PostForm[i] == '/') ||
             (PostForm[i] == '+') || (PostForm[i] == '-'))
         {
-            float a = Value.Pop();
-            float b = Value.Pop();
+            float a = Value.TopPop();
+			Value.Pop();
+            float b = Value.TopPop();
+			Value.Pop();
+
             if (PostForm[i] == '*') Value.Push(b * a);
             if (PostForm[i] == '/') 
             {
@@ -148,5 +176,5 @@ float Postfix::CountingValue(string PostForm, string Letters, float* Numbers)
             if (PostForm[i] == '-') Value.Push(b - a);
         }
     }
-    return Value.Pop();
+    return Value.TopPop();
 };

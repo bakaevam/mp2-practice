@@ -18,7 +18,16 @@ void main()
     cout << "  +------------------------------------+\n";
     cout << "\n  Enter the arithmetick string: ";
     getline(cin, strUser);
-	post = Postfix::PostfixForm(strUser);
+	try
+	{
+		post = Postfix::PostfixForm(strUser);
+	}
+	catch (Exception_errors& e)
+	{
+		cerr << e.what() << endl;
+	};
+	cout << "\n  Postfix Form: " << post << endl;
+
     int c = Postfix::Count(post);
     float* Numbers = new float[c];
     Postfix::Value(Letters, Numbers, post, c);

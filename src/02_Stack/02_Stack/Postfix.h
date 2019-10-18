@@ -4,12 +4,12 @@
 #include <string>
 
 class Postfix
-{
+{private:
+	static bool SignComparison(char, Stack<char>&);
+	static int Priority(char);
 public:
-    static int Priority(char);
-    static bool SignComparison(char, Stack<char>&);
+	static int Count(string);
     static string PostfixForm(string);
-    static int Count(string);
     static void Value(string&, float* Numbers, string, int);
     static float CountingValue(string, string, float*);
 };
