@@ -1,4 +1,6 @@
 #include "Stack.h"
+#include "Postfix.h"
+#include "Exception.h"
 #include <cstdio>
 #include <iostream>
 #include <string>
@@ -6,29 +8,29 @@ using namespace std;
 
 void main()
 {
-    char* post;
-    int S = 0;
     float amount = 0;
-    char* strUser = new char[100];
+    string strUser;
+    string post;
+    string Letters;
 
     cout << "  +------------------------------------+\n";
     cout << "  |\t      -POSTFIX NOTATION-       |\n";
     cout << "  +------------------------------------+\n";
     cout << "\n  Enter the arithmetick string: ";
-    cin.getline(strUser, 100);
-    char tmp[25];
-	post = PostfixForm(strUser, S);
-
-    for(int i = 0; i < S; i++)
-        tmp[i] = post[i]; 
+    getline(cin, strUser);
+	post = Postfix::PostfixForm(strUser);
+    int c = Postfix::Count(post);
+    float* Numbers = new float[c];
+    Postfix::Value(Letters, Numbers, post, c);
+ 
     try
     {
-        amount = CountingValue(tmp, S);
+        amount = Postfix::CountingValue(post, Letters, Numbers);
+        cout << "  Result = " << amount;
     }
     catch(Exception_errors& e)
     {
         cerr << e.what() << endl;
     };
-    cout << "\n  Result = " << amount;
     cin.get();
 }
