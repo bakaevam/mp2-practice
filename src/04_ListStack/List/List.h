@@ -1,8 +1,9 @@
 #ifndef _LIST_H_
 #define _LIST_H_
 #include "Node.h"
+#include <iostream>
 
-template<class Tkey, class TData>
+template<class TKey, class TData>
 class TList
 {
 private:
@@ -14,10 +15,10 @@ private:
 public:
     TList();
     TList(const TList&);
-    TList(const TNode< TKey, TData>*);
+    TList(const TNode<TKey, TData>*);
     ~TList();
 
-    TNode* Search(TKey);
+    TNode<TKey, TData>* Search(TKey);
     void InsertToStart(TKey, TData*);
     void InsertToEnd(TKey, TData*);
     void InsertAfter(TKey, TKey, TData*);
@@ -73,7 +74,7 @@ TList<TKey, TData>::TList(const TNode<TKey, TData>* _first)
 };
 
 template<class TKey, class TData>
-TList::~TList()
+TList<TKey, TData>::~TList()
 {
     Reset();
     while (!IsEnded())
@@ -86,7 +87,7 @@ TList::~TList()
 }
 
 template<class TKey, class TData>
-TNode* TList<TKey, TData>::Search(TKey Key)
+TNode<TKey, TData>* TList<TKey, TData>::Search(TKey _key)
 {
     while (!IsEnded())
     {
@@ -106,10 +107,10 @@ template<class TKey, class TData>
 void TList<TKey, TData>::InsertToStart(TKey Key, TData* _data)
 {
     Reset();
-    TNode<Tkey, TData>* node = new TNode<TKey, TData>(Key, _data, pFirst);
+    TNode<TKey, TData>* node = new TNode<TKey, TData>(Key, _data, pFirst);
     pNext = pFirst;
     pFirst = node;
-    PCurr = pFirst;
+    pCurr = pFirst;
     Reset();
 };
 
@@ -198,7 +199,7 @@ void TList<TKey, TData>::Reset()
 {
     pCurr = pFirst;
     pPrev = nullptr;
-    pNext = pCurr->pNext;
+    //pNext = pFirst->pNext;
 };
 
 template<class TKey, class TData>
@@ -214,6 +215,6 @@ void TList<TKey, TData>::Next()
 {
     pPrev = pCurr;
     pCurr = pNext;
-    PNext = pCurr->pNext;
+    pNext = pCurr->pNext;
 };
 #endif 

@@ -42,7 +42,7 @@ TNode<TKey, TData>::TNode(const TNode& tmp)
 template<class TKey, class TData>
 TNode<TKey, TData>::~TNode()
 {
-    Key = nullptr;
+    Key = 0;
     delete[] data;
     pNext = nullptr;
 };
