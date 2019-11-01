@@ -49,9 +49,11 @@ string Postfix::PostfixForm(string exp)
 
             if (SignComparison(exp[i], Sign)) // функция сравнения знака на вершине и приходящего знака
             {
-                while (!Sign.IsEmpty())
-                    Operands.Push(Sign.TopPop());
-				Sign.Pop();
+				while (!Sign.IsEmpty())
+				{
+					Operands.Push(Sign.TopPop());
+					Sign.Pop();
+				}
                 Sign.Push(exp[i]);
             }
             else

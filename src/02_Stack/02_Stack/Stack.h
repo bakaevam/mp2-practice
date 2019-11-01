@@ -85,7 +85,7 @@ bool Stack<ValType>::IsEmpty() const
 template<class ValType>
 bool Stack<ValType>::IsFull() const
 {
-    if (top == size)
+    if ((top + 1) == size)
         return true;
     return false;
 };
