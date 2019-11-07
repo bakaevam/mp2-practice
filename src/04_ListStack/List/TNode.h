@@ -1,5 +1,7 @@
-#ifndef _NODE_H_
-#define _NODE_H_
+#ifndef _TNODE_H_
+#define _TNODE_H_
+#include <iostream>
+using namespace std;
 
 template<class TKey, class TData>
 class TNode
@@ -13,8 +15,10 @@ public:
     TNode(const TNode&);
     TNode(TKey, TData*, TNode*);
     ~TNode();
-};
 
+    void Output();
+};
+//////////////////////////////////////////////////////////
 template<class TKey, class TData>
 TNode<TKey, TData>::TNode()
 {
@@ -27,12 +31,12 @@ template<class TKey, class TData>
 TNode<TKey, TData>::TNode(TKey _key, TData* _data, TNode* _node)
 {
     Key = _key;
-    data = new (_data);
+    data = _data;
     pNext = _node;
 };
 
 template<class TKey, class TData>
-TNode<TKey, TData>::TNode(const TNode& tmp)
+TNode<TKey, TData>::TNode(const TNode<TKey, TData>& tmp)
 {
     Key = tmp.Key;
     pNext = tmp.pNext;
@@ -43,7 +47,14 @@ template<class TKey, class TData>
 TNode<TKey, TData>::~TNode()
 {
     Key = 0;
-    delete[] data;
+    data = nullptr;
     pNext = nullptr;
 };
+
+template<class TKey, class TData>
+void TNode<TKey, TData>::Output()
+{
+    cout << " \n" << this->Key;
+    cout << " \n   |\n";
+}
 #endif
