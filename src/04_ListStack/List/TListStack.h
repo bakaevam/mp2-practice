@@ -32,7 +32,7 @@ TListStack<TKey, TData>::TListStack(const TListStack& tmp)
 };
 
 template<class TKey, class TData>
-TListStack<TKey, TData>::~TListStack()
+TListStack<TKey, TData>::~TListStack<TKey, TData>()
 {
     delete List;
 };

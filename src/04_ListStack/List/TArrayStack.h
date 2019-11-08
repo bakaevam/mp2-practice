@@ -4,7 +4,7 @@
 using namespace std;
 
 template<class ValType>
-class TArrayStack : public TStack
+class TArrayStack : public TStack<ValType>
 {
 private:
     int size;

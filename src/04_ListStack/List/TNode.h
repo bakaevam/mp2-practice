@@ -13,7 +13,7 @@ public:
 
     TNode();
     TNode(const TNode&);
-    TNode(TKey, TData*, TNode*);
+    TNode(TKey, TData*);
     ~TNode();
 
     void Output();
@@ -28,18 +28,18 @@ TNode<TKey, TData>::TNode()
 };
 
 template<class TKey, class TData>
-TNode<TKey, TData>::TNode(TKey _key, TData* _data, TNode* _node)
+TNode<TKey, TData>::TNode(TKey _key, TData* _data)
 {
     Key = _key;
     data = _data;
-    pNext = _node;
+    pNext = nullptr;
 };
 
 template<class TKey, class TData>
 TNode<TKey, TData>::TNode(const TNode<TKey, TData>& tmp)
 {
     Key = tmp.Key;
-    pNext = tmp.pNext;
+    pNext = nullptr;
     data = tmp.data;
 };
 
