@@ -2,6 +2,7 @@
 #define _TPOST_H_
 #include "TStack.h"
 #include <string>
+#include <stdio.h>
 
 template<class ValType>
 class TPost
@@ -24,6 +25,7 @@ public:
     TPost(StackType);
     ~TPost();
 
+    void UserStr();
     int Count(string);
     string PostfixForm(string);
     void Value(string&, float* Numbers, string, int);
@@ -33,21 +35,21 @@ public:
 template<class ValType>
 TPost<ValType>::TPost()
 {
-    Operands = new TStack;
+   /* Operands = new TStack;
     Signs = new TStack;
-    Value = new TStack;
+    Value = new TStack;*/
 }
 
 template<class ValType>
 TPost<ValType>::TPost(StackType type)
 {
-    if (type == Array)
+    if (type == a)
     {
         Operands = new TArrayStack;
         Signs = new TArrayStack;
         Value = new TArrayStack;
     };
-    if (type == List)
+    if (type == l)
     {
         Operands = new TListStack;
         Signs = new TListStack;
@@ -64,6 +66,29 @@ TPost<ValType>::~TPost()
     delete Signs;
     delete Value;
 }
+
+template<class ValType>
+ValType TPost<ValType>::UserStr()
+{
+    cout << "  Enter type of stack (a = Array, l = list): ";
+    string StackType = nullptr;
+    getline(cin, StackType);
+
+    if ((StackType != a) && (StackType != l))
+        throw "  Stack Type isn't correct";
+
+    string strUser = nullptr;
+    cout << "\n  Enter the arithmetic string: ";
+    getline(cin, strUser);
+    string post = PostfixForm(strUser);
+
+    int c = Count(post);
+    float* Numbers = new float[c];
+    string Letters = nullptr;
+    Value(Letters, Numbers, post, c);
+    float amount = CountingValue(post, Letters, Numbers);
+    cout << "\n  Result: " << amount;
+};
 
 template<class ValType>
 int TPost::Priority(char sign)

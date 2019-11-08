@@ -1,4 +1,5 @@
 #include "TStack.h"
+#include "TPost.h"
 #include <iostream>
 using namespace std;
 
@@ -15,10 +16,10 @@ void main()
 
     cout << "\n  List 1: ";
     L1.Print();
-    cout << "\n  List 2: ";
+    cout << "  List 2: ";
     L2.Print();
 
-    cout << "  Find the element with key 2: " << L2.Search(2) << endl;
+    cout << endl << "  Find the element with key 2: " << L2.Search(2) << endl;
 
     L1.InsertAfter(3, 4, a);
     cout << "  Insert after key 3: ";
@@ -27,6 +28,20 @@ void main()
     L2.InsertBefore(2, 1, a);
     cout << "  Insert before key 2: ";
     L2.Print();
+
+    L2.InsertBefore(3, 10, a);
+    cout << "  Insert before key 3: ";
+    L2.Print();
+
+    L2.Remove(10);
+    cout << "  Delete the elemtnt with key 10: ";
+    L2.Print();
+
+    //// Test PostfixForm ////
+    cout << endl << "\t--Postfix Form Test--" << endl;
+
+    TPost<char> str;
+
 
     cin.get();
 }

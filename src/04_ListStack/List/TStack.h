@@ -61,7 +61,7 @@ public:
     void Remove(TKey);
 
     void Reset();
-    bool IsEnded() const;
+    bool IsEnded();
     void Next();
 
     void Print();
@@ -215,12 +215,11 @@ template<class TKey, class TData>
 TNode<TKey, TData>* TList<TKey, TData>::Search(TKey _key)
 {
     Reset();
-    TNode<TKey, TData>* tmp = pFirst;
-    while (tmp != nullptr)
+    //TNode<TKey, TData>* tmp = pFirst;
+    while (pCurr != nullptr)
     {
-        if (tmp->Key == _key)
-            return tmp;
-        tmp = tmp->pNext;
+        if (pCurr->Key == _key)
+            return pCurr;
         Next();
     };
 
@@ -249,7 +248,7 @@ void TList<TKey, TData>::InsertToEnd(TKey _Key, TData* _data)
         Next();
 
     TNode<TKey, TData>* node = new TNode<TKey, TData>(_Key, _data);
-    pCurr->pNext = node;
+    pPrev->pNext = node;
     Reset();
 };
 
@@ -281,14 +280,21 @@ void TList<TKey, TData>::InsertBefore(TKey _Key, TKey newKey, TData* _data)
         return;
     }
 
+    if (pFirst->Key == _Key)
+    {
+        TNode<TKey,TData>* node = new TNode<TKey, TData>(newKey, _data);
+        node->pNext = pFirst;
+        pFirst = node;
+        return;
+    }
+
     TNode<TKey, TData>* node = Search(_Key);
     if (node == nullptr)
         throw "  Key didn't find";
 
     TNode<TKey, TData>* _node = new TNode<TKey, TData>(newKey, _data);
-    pNext = pCurr;
+    _node->pNext = pCurr;
     pPrev->pNext = _node;
-    pCurr = _node;
 
     Reset();
     return;
@@ -302,7 +308,7 @@ void TList<TKey, TData>::Remove(TKey _Key)
     if (!pFirst)
         throw "  List is Empty";
 
-    if (pFirst->Key == Key)
+    if (pFirst->Key == _Key)
     {
         delete pFirst;
         pFirst = pNext;
@@ -331,9 +337,9 @@ void TList<TKey, TData>::Reset()
 };
 
 template<class TKey, class TData>
-bool TList<TKey, TData>::IsEnded() const
+bool TList<TKey, TData>::IsEnded() 
 {
-    if (pCurr->pNext == nullptr)
+    if (pCurr == nullptr)
         return true;
     return false;
 };
@@ -341,16 +347,17 @@ bool TList<TKey, TData>::IsEnded() const
 template<class TKey, class TData>
 void TList<TKey, TData>::Next()
 {
-    if (pCurr != nullptr)
+    if (pCurr->pNext == nullptr)
+    {
+        pPrev = pCurr;
+        pCurr = pNext;
+        pNext = nullptr;
+    }
+    else
     {
         pPrev = pCurr;
         pCurr = pNext;
         pNext = pNext->pNext;
-    }
-    else
-    {
-        pCurr = pNext;
-        pNext = nullptr;
     };
 };
 
