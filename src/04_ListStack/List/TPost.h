@@ -1,97 +1,60 @@
 #ifndef _TPOST_H_
 #define _TPOST_H_
 #include "TStack.h"
+#include "Exception.h"
 #include <string>
+#include <iostream>
 #include <stdio.h>
+using namespace std;
 
 template<class ValType>
 class TPost
 {
 private:
-    TStack<ValType> Operands;
-    TStack<ValType> Signs;
-    TStack<ValType> Value;
-
-    enum StackType
-    {
-        Array,
-        List,
-    };
+    TStack<char>* Operands;
+    TStack<char>* Signs;
+    TStack<float>* Value;
 
     bool SignComparison(char, TStack<char>&);
     int Priority(char);
-public:
-    TPost();
-    TPost(StackType);
-    ~TPost();
-
-    void UserStr();
     int Count(string);
+public:
+    TPost(StackType);
+
+    ValType UserStr();
     string PostfixForm(string);
-    void Value(string&, float* Numbers, string, int);
+    void Values(string&, float*, string, int);
     float CountingValue(string, string, float*);
 };
 
 template<class ValType>
-TPost<ValType>::TPost()
-{
-   /* Operands = new TStack;
-    Signs = new TStack;
-    Value = new TStack;*/
-}
-
-template<class ValType>
 TPost<ValType>::TPost(StackType type)
 {
-    if (type == a)
-    {
-        Operands = new TArrayStack;
-        Signs = new TArrayStack;
-        Value = new TArrayStack;
-    };
-    if (type == l)
-    {
-        Operands = new TListStack;
-        Signs = new TListStack;
-        Value = new TListStack;
-    };
-
-    throw "  Stack Type isn't correct";
-}
-
-template<class ValType>
-TPost<ValType>::~TPost()
-{
-    delete Operands;
-    delete Signs;
-    delete Value;
+    Operands = TStack<char>::Create(type);
+    Signs = TStack<char>::Create(type);
+    Value = TStack<float>::Create(type);
 }
 
 template<class ValType>
 ValType TPost<ValType>::UserStr()
 {
-    cout << "  Enter type of stack (a = Array, l = list): ";
-    string StackType = nullptr;
-    getline(cin, StackType);
-
-    if ((StackType != a) && (StackType != l))
-        throw "  Stack Type isn't correct";
-
-    string strUser = nullptr;
+    string strUser;
     cout << "\n  Enter the arithmetic string: ";
     getline(cin, strUser);
     string post = PostfixForm(strUser);
 
+    cout << "  Postfix form: " << post << endl;
+
     int c = Count(post);
     float* Numbers = new float[c];
-    string Letters = nullptr;
-    Value(Letters, Numbers, post, c);
+    string Letters;
+    Values(Letters, Numbers, post, c);
     float amount = CountingValue(post, Letters, Numbers);
-    cout << "\n  Result: " << amount;
+    return amount;
 };
 
 template<class ValType>
-int TPost::Priority(char sign)
+int TPost<ValType>::Priority(char sign)
 {
     switch (sign)
     {
@@ -104,7 +67,7 @@ int TPost::Priority(char sign)
 }
 
 template<class ValType>
-bool TPost::SignComparison(char tmp, TStack<char>& _sign)
+bool TPost<ValType>::SignComparison(char tmp, TStack<char>& _sign)
 {
     
     if (Priority(_sign.TopPop()) < Priority(tmp))
@@ -114,10 +77,8 @@ bool TPost::SignComparison(char tmp, TStack<char>& _sign)
 };
 
 template<class ValType>
-string TPost::PostfixForm(string exp)
+string TPost<ValType>::PostfixForm(string exp)
 {
-    Signs(exp.length() + 1);
-    Operands(exp.length() + 1);
     char _size = exp.length();
 
     for (int i = 0; i < exp.length(); i++)
@@ -129,64 +90,64 @@ string TPost::PostfixForm(string exp)
             
             if (exp[i] == ' ')
                 continue;
-            if (Sign.IsEmpty())
+            if (Signs->IsEmpty())
             {
-                Signs.Push(exp[i]);
+                Signs->Push(exp[i]);
                 continue;
             }
 
-            if (SignComparison(exp[i], Signs)) 
+            if (SignComparison(exp[i], *Signs)) 
             {
-                while (!Signs.IsEmpty())
+                while (!Signs->IsEmpty())
                 {
-                    Operands.Push(Signs.TopPop());
-                    Signs.Pop();
+                    Operands->Push(Signs->TopPop());
+                    Signs->Pop();
                 }
-                Signs.Push(exp[i]);
+                Signs->Push(exp[i]);
             }
             else
-                Signs.Push(exp[i]);
+                Signs->Push(exp[i]);
         }
 
         if (exp[i] == '(')
-            Signs.Push(exp[i]);
+            Signs->Push(exp[i]);
 
         
         if (isalpha(exp[i]))
-            Operands.Push(exp[i]);
+            Operands->Push(exp[i]);
 
         
         if (exp[i] == ')')
         {
             int flag = 0;
-            while (!Signs.IsEmpty())
+            while (!Signs->IsEmpty())
             {
-                if (Signs.TopPop() != '(')
+                if (Signs->TopPop() != '(')
                 {
-                    Operands.Push(Signs.TopPop());
-                    Signs.Pop();
+                    Operands->Push(Signs->TopPop());
+                    Signs->Pop();
                     continue;
                 }
-                Signs.Pop();
+                Signs->Pop();
                 flag = 1;
                 break;
             };
-            if ((Signs.IsEmpty()) && (flag != 1))
+            if ((Signs->IsEmpty()) && (flag != 1))
                 throw Exception_errors("  Didn't find '('");
         };
     };
 
     
-    while (!Signs.IsEmpty())
+    while (!Signs->IsEmpty())
     {
-        Operands.Push(Signs.TopPop());
-        Signs.Pop();
+        Operands->Push(Signs->TopPop());
+        Signs->Pop();
     }
     string tmp;
-    while (!Operands.IsEmpty())
+    while (!Operands->IsEmpty())
     {
-        tmp += Operands.TopPop();
-        Operands.Pop();
+        tmp += Operands->TopPop();
+        Operands->Pop();
     }
 
     for (int i = 0; i < tmp.length() / 2; i++)
@@ -196,17 +157,17 @@ string TPost::PostfixForm(string exp)
 };
 
 template<class ValType>
-int TPost::Count(string PostForm)
+int TPost<ValType>::Count(string PostForm)
 {
     int count = 0;
     for (int i = 0; i < PostForm.length(); i++)
         if (isalpha(PostForm[i]))
             count++;
     return count;
-}
+};
 
 template<class ValType>
-void TPost::Value(string& Letters, float* Numbers, string PostForm, int count)
+void TPost<ValType>::Values(string& Letters, float* Numbers, string PostForm, int count)
 {
     int topLetters = 0;
     float val = 0;
@@ -236,39 +197,38 @@ void TPost::Value(string& Letters, float* Numbers, string PostForm, int count)
 };
 
 template<class ValType>
-float TPost::CountingValue(string PostForm, string Letters, float* Numbers)
+float TPost<ValType>::CountingValue(string PostForm, string Letters, float* Numbers)
 {
-    Value(25);
+    //Value(25);
 
-    
     for (int i = 0; i < PostForm.length(); i++)
     {
         if (isalpha(PostForm[i]))
             for (int j = 0; j < Letters.length(); j++)
                 if (Letters[j] == PostForm[i])
                 {
-                    Value.Push(Numbers[j]);
+                    Value->Push(Numbers[j]);
                     break;
                 }
         if ((PostForm[i] == '*') || (PostForm[i] == '/') ||
             (PostForm[i] == '+') || (PostForm[i] == '-'))
         {
-            float a = Value.TopPop();
-            Value.Pop();
-            float b = Value.TopPop();
-            Value.Pop();
+            float a = Value->TopPop();
+            Value->Pop();
+            float b = Value->TopPop();
+            Value->Pop();
 
-            if (PostForm[i] == '*') Value.Push(b * a);
+            if (PostForm[i] == '*') Value->Push(b * a);
             if (PostForm[i] == '/')
             {
                 if (a == 0)
                     throw  Exception_errors("\n  Cannot be divided by 0");
-                else Value.Push(b / a);
+                else Value->Push(b / a);
             };
-            if (PostForm[i] == '+') Value.Push(b + a);
-            if (PostForm[i] == '-') Value.Push(b - a);
+            if (PostForm[i] == '+') Value->Push(b + a);
+            if (PostForm[i] == '-') Value->Push(b - a);
         }
     }
-    return Value.TopPop();
+    return Value->TopPop();
 };
 #endif

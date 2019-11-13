@@ -1,57 +1,8 @@
-#ifndef  _TSTACK_H_
-#define _TSTACK_H_
-#include <iostream>
+#ifndef _TLIST_H_
+#define _TLIST_H_
 #include "TNode.h"
+#include <iostream>
 using namespace std;
-
-enum StackType
-{
-    Array,
-    List,
-};
-
-template<class ValType>
-class TStack
-{
-public:
-    static TStack* Create(StackType);
-
-    virtual bool IsEmpty() const = 0;
-    virtual bool IsFull() const = 0;
-    virtual void Push(ValType) = 0;
-    virtual void Pop() = 0;
-    virtual ValType TopPop() const = 0;
-};
-
-template<class ValType>
-class TArrayStack : public TStack<ValType>
-{
-private:
-    int size;
-    int top;
-    ValType* elem;
-public:
-    TArrayStack(int max);
-    TArrayStack(const TArrayStack&);
-    ~TArrayStack();
-
-    void Push(ValType);
-    ValType TopPop() const;
-    void Pop();
-    bool IsEmpty() const;
-    bool IsFull() const;
-
-    friend ostream& operator<<(ostream& os, const TArrayStack& tmp)
-    {
-        cout << "\n  ";
-        while (!tmp.IsEmpty())
-            for (int i = 0; i < tmp.top; i++)
-                os << " " << tmp.elem[i];
-        return os;
-    };
-};
-
-//// CLASS TLIST ////
 
 template<class TKey, class TData>
 class TList
@@ -80,113 +31,8 @@ public:
     void Next();
 
     void Print();
-    TNode<TKey, TData>* GetpFirst() const;
-
-    template<class ValType>
-    friend class TListStack;
 };
 
-//// CLASS TLISTSTACK ////
-
-template<class ValType>
-class TListStack : public TStack<ValType>
-{
-private:
-    TList<ValType, ValType>* ListElem;
-public:
-    TListStack();
-    TListStack(const TListStack&);
-    ~TListStack();
-
-    void Push(ValType);
-    ValType TopPop() const;
-    void Pop();
-    bool IsEmpty() const;
-    bool IsFull() const;
-};
-
-/////  IMPLEMENTATION TSTACK/////
-
-template<class ValType>
-TStack<ValType>* TStack<ValType>::Create(StackType type)
-{
-    if (type == Array)
-        return new TArrayStack<ValType>(100);
-    if(type == List)
-        return new TListStack<ValType>();
-    throw " Stack Type isn't correct";
-};
-
-/////  IMPLEMENTATION TARRAY STACK/////
-template<class ValType>
-TArrayStack<ValType>::TArrayStack(int max)
-{
-    size = max;
-    top = 0;
-    elem = new ValType[size];
-    for (int i = 0; i < size; i++)
-        elem[i] = 0;
-};
-
-template<class ValType>
-TArrayStack<ValType>::TArrayStack(const TArrayStack& tmp)
-{
-    size = tmp.size;
-    top = tmp.top;
-    elem = new ValType[size];
-    for (int i = 0; i < size; i++)
-        elem[i] = tmp.elem[i];
-};
-
-template<class ValType>
-TArrayStack<ValType>::~TArrayStack()
-{
-    size = 0;
-    top = 0;
-    delete[] elem;
-};
-
-template<class ValType>
-void TArrayStack<ValType>::Push(ValType num)
-{
-    if (IsFull())
-        throw Exception_errors("  Stack is full");
-    elem[top++] = num;
-};
-
-template<class ValType>
-ValType TArrayStack<ValType>::TopPop() const
-{
-    if (IsEmpty())
-        throw Exception_errors("  Stack is empty");
-    return elem[top - 1];
-};
-
-template<class ValType>
-void TArrayStack<ValType>::Pop()
-{
-    if (IsEmpty())
-        throw Exception_errors("  Stack is empty");
-    top--;
-};
-
-template<class ValType>
-bool TArrayStack<ValType>::IsEmpty() const
-{
-    if (top == 0)
-        return true;
-    return false;
-};
-
-template<class ValType>
-bool TArrayStack<ValType>::IsFull() const
-{
-    if ((top + 1) == size)
-        return true;
-    return false;
-};
-
-///// IMPLEMENTATION TLIST /////
 template<class TKey, class TData>
 TList<TKey, TData>::TList()
 {
@@ -310,7 +156,7 @@ void TList<TKey, TData>::InsertBefore(TKey _Key, TKey newKey, TData* _data)
 
     if (pFirst->Key == _Key)
     {
-        TNode<TKey,TData>* node = new TNode<TKey, TData>(newKey, _data);
+        TNode<TKey, TData>* node = new TNode<TKey, TData>(newKey, _data);
         node->pNext = pFirst;
         pFirst = node;
         return;
@@ -352,20 +198,20 @@ void TList<TKey, TData>::Remove(TKey _Key)
     pPrev->pNext = pNext;
     delete node;
 
-    //Reset();
+    Reset();
     return;
 };
 
 template<class TKey, class TData>
 void TList<TKey, TData>::Reset()
 {
-    pNext = pCurr->pNext;
     pCurr = pFirst;
     pPrev = nullptr;
+    pNext = pCurr->pNext;
 };
 
 template<class TKey, class TData>
-bool TList<TKey, TData>::IsEnded() 
+bool TList<TKey, TData>::IsEnded()
 {
     if (pCurr == nullptr)
         return true;
@@ -396,79 +242,10 @@ void TList<TKey, TData>::Print()
     TNode<TKey, TData>* tmp = pFirst;
     while (tmp != 0)
     {
-        cout << "  " << tmp->Key <<" ";
+        cout << "  " << tmp->Key << " ";
         tmp = tmp->pNext;
     }
     cout << endl;
 };
 
-template<class TKey, class TData>
-TNode<TKey, TData>* TList<TKey, TData>::GetpFirst() const
-{
-    return pFirst;
-};
-
-///// IMPLEMENTATION TLIST STACK/////
-
-template<class ValType>
-TListStack<ValType>::TListStack()
-{
-    ListElem = new TList<ValType, ValType>;
-};
-
-template<class ValType>
-TListStack<ValType>::TListStack(const TListStack<ValType>& tmp)
-{
-    ListElem = new TList<ValType, ValType>(tmp.ListElem);
-};
-
-template<class ValType>
-TListStack<ValType>::~TListStack()
-{
-    delete[] ListElem;
-};
-
-template<class ValType>
-void TListStack<ValType>::Push(ValType _key)
-{
-    if (IsFull())
-        throw "  Stack is full";
-    ListElem->InsertToStart(_key, nullptr);
-    ListElem->Reset();
-};
-
-template<class ValType>
-ValType TListStack<ValType>::TopPop() const
-{
-    if (IsEmpty())
-        throw "  Stack is empty";
-
-    return ListElem->GetpFirst()->Key;
-};
-
-template<class ValType>
-void TListStack<ValType>::Pop()
-{
-    if (IsEmpty())
-        throw "  Stack is empty";
-
-    ListElem->Remove(ListElem->GetpFirst()->Key);
-    //ListElem->Reset();
-};
-
-template<class ValType>
-bool TListStack<ValType>::IsEmpty() const
-{
-    if (ListElem->GetpFirst() == nullptr)
-        return true;
-    else return false;
-};
-
-template<class ValType>
-bool TListStack<ValType>::IsFull() const
-{
-    TNode<ValType, ValType>* tmp = new TNode<ValType, ValType>();
-    return !tmp;
-};
-#endif
-
+#endif 

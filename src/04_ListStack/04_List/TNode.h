@@ -22,7 +22,7 @@ public:
 template<class TKey, class TData>
 TNode<TKey, TData>::TNode()
 {
-    Key = 0;
+    Key = nullptr;
     data = nullptr;
     pNext = nullptr;
 };
