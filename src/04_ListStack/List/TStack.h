@@ -2,6 +2,7 @@
 #define _TSTACK_H_
 #include <iostream>
 #include "TNode.h"
+#include "Exception.h"
 using namespace std;
 
 enum StackType
@@ -114,7 +115,7 @@ TStack<ValType>* TStack<ValType>::Create(StackType type)
         return new TArrayStack<ValType>(100);
     if(type == List)
         return new TListStack<ValType>();
-    throw " Stack Type isn't correct";
+    throw Exception_errors(" Stack Type isn't correct");
 };
 
 /////  IMPLEMENTATION TARRAY STACK/////
@@ -243,7 +244,6 @@ template<class TKey, class TData>
 TNode<TKey, TData>* TList<TKey, TData>::Search(TKey _key)
 {
     Reset();
-    //TNode<TKey, TData>* tmp = pFirst;
     while (pCurr != nullptr)
     {
         if (pCurr->Key == _key)
@@ -287,7 +287,7 @@ void TList<TKey, TData>::InsertAfter(TKey _Key, TKey newKey, TData* _data)
 
     TNode<TKey, TData>* node = Search(_Key);
     if (node == nullptr)
-        throw "  Key didn't find";
+        throw Exception_errors("  Key didn't find");
 
     TNode<TKey, TData>* _node = new TNode<TKey, TData>(newKey, _data);
     _node->pNext = node->pNext;
@@ -318,7 +318,7 @@ void TList<TKey, TData>::InsertBefore(TKey _Key, TKey newKey, TData* _data)
 
     TNode<TKey, TData>* node = Search(_Key);
     if (node == nullptr)
-        throw "  Key didn't find";
+        throw Exception_errors("  Key didn't find");
 
     TNode<TKey, TData>* _node = new TNode<TKey, TData>(newKey, _data);
     _node->pNext = pCurr;
@@ -334,7 +334,7 @@ void TList<TKey, TData>::Remove(TKey _Key)
     Reset();
 
     if (!pFirst)
-        throw "  List is Empty";
+        throw Exception_errors("  List is Empty");
 
     if (pFirst->Key == _Key)
     {
@@ -347,12 +347,11 @@ void TList<TKey, TData>::Remove(TKey _Key)
     TNode<TKey, TData>* node = Search(_Key);
 
     if (node == nullptr)
-        throw "  Key didn't find";
+        throw Exception_errors("  Key didn't find");
 
     pPrev->pNext = pNext;
     delete node;
 
-    //Reset();
     return;
 };
 
@@ -432,7 +431,7 @@ template<class ValType>
 void TListStack<ValType>::Push(ValType _key)
 {
     if (IsFull())
-        throw "  Stack is full";
+        throw Exception_errors("  Stack is full");
     ListElem->InsertToStart(_key, nullptr);
     ListElem->Reset();
 };
@@ -441,7 +440,7 @@ template<class ValType>
 ValType TListStack<ValType>::TopPop() const
 {
     if (IsEmpty())
-        throw "  Stack is empty";
+        throw Exception_errors("  Stack is empty");
 
     return ListElem->GetpFirst()->Key;
 };
@@ -450,10 +449,9 @@ template<class ValType>
 void TListStack<ValType>::Pop()
 {
     if (IsEmpty())
-        throw "  Stack is empty";
+        throw Exception_errors("  Stack is empty");
 
     ListElem->Remove(ListElem->GetpFirst()->Key);
-    //ListElem->Reset();
 };
 
 template<class ValType>

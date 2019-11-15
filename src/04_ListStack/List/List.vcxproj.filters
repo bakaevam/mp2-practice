@@ -13,28 +13,22 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Includes">
+      <UniqueIdentifier>{4bdf3724-d739-430e-a8b0-f81018d583d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TArrayStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TListStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TPost.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TList.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Exception.h">
+      <Filter>Header Files\Includes</Filter>
     </ClInclude>
     <ClInclude Include="TNode.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Includes</Filter>
     </ClInclude>
-    <ClInclude Include="Exception.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="TPost.h">
+      <Filter>Header Files\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="TStack.h">
+      <Filter>Header Files\Includes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -143,10 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Exception.h" />
-    <ClInclude Include="TList.h" />
     <ClInclude Include="TNode.h" />
-    <ClInclude Include="TArrayStack.h" />
-    <ClInclude Include="TListStack.h" />
     <ClInclude Include="TPost.h" />
     <ClInclude Include="TStack.h" />
   </ItemGroup>
