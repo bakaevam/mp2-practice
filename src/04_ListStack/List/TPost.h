@@ -70,7 +70,7 @@ template<class ValType>
 bool TPost<ValType>::SignComparison(char tmp, TStack<char>& _sign)
 {
     
-    if (Priority(_sign.TopPop()) < Priority(tmp))
+    if (Priority(_sign.TopPop()) <= Priority(tmp))
         return true;
 
     return false;

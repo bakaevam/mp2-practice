@@ -23,7 +23,7 @@ void main()
         {
             TPost<float> str(Array);
             float res = str.UserStr();
-            cout << res;
+			cout << "\n  Result: " << res;
         };
     }
     catch (Exception_errors& e)

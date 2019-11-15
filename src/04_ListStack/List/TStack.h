@@ -77,7 +77,7 @@ public:
     void Remove(TKey);
 
     void Reset();
-    bool IsEnded();
+	bool IsEnded() const;
     void Next();
 
     void Print();
@@ -364,7 +364,7 @@ void TList<TKey, TData>::Reset()
 };
 
 template<class TKey, class TData>
-bool TList<TKey, TData>::IsEnded() 
+bool TList<TKey, TData>::IsEnded() const
 {
     if (pCurr == nullptr)
         return true;
