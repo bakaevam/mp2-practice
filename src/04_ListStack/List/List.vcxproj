@@ -142,6 +142,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="Includes\Exception.h" />
     <ClInclude Include="Includes\TArrayStack.h" />
     <ClInclude Include="Includes\TList.h" />
@@ -149,9 +152,6 @@
     <ClInclude Include="Includes\TNode.h" />
     <ClInclude Include="Includes\TPost.h" />
     <ClInclude Include="Includes\TStack.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

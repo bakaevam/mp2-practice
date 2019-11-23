@@ -1,6 +1,7 @@
 #ifndef _TPOST_H_
 #define _TPOST_H_
-#include "TStack.h"
+#include "TListStack.h"
+#include "TArrayStack.h"
 #include "Exception.h"
 #include <string>
 #include <iostream>
@@ -82,8 +83,7 @@ string TPost<ValType>::PostfixForm(string exp)
     char _size = exp.length();
 
     for (int i = 0; i < exp.length(); i++)
-    {
-        
+    {        
         if ((exp[i] == '*') || (exp[i] == '/') ||
             (exp[i] == '+') || (exp[i] == '-'))
         {
@@ -98,7 +98,7 @@ string TPost<ValType>::PostfixForm(string exp)
 
             if (SignComparison(exp[i], *Signs)) 
             {
-                while (!Signs->IsEmpty())
+                while (SignComparison(exp[i], *Signs))
                 {
                     Operands->Push(Signs->TopPop());
                     Signs->Pop();
@@ -199,8 +199,6 @@ void TPost<ValType>::Values(string& Letters, float* Numbers, string PostForm, in
 template<class ValType>
 float TPost<ValType>::CountingValue(string PostForm, string Letters, float* Numbers)
 {
-    //Value(25);
-
     for (int i = 0; i < PostForm.length(); i++)
     {
         if (isalpha(PostForm[i]))

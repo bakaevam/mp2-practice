@@ -21,6 +21,7 @@ public:
     void Pop();
     bool IsEmpty() const;
     bool IsFull() const;
+    
 };
 
 ///// IMPLEMENTATION TLIST STACK/////

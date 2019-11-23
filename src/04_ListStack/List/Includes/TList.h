@@ -26,6 +26,7 @@ public:
     void InsertAfter(TKey, TKey, TData*);
     void InsertBefore(TKey, TKey, TData*);
     void Remove(TKey);
+    TNode<TKey, TData>* GetpFirst() const;
 
     void Reset();
     bool IsEnded() const;
@@ -34,8 +35,8 @@ public:
     template<class TKey, class TData>
     friend ostream& operator<<(ostream& os, TList<TKey, TData>& tmp);
 
-    //template<class ValType>
-    //friend class TListStack;
+    template<class ValType>
+    friend class TListStack;
 };
 
 template<typename TKey, typename TData>
@@ -351,6 +352,12 @@ void TList<TKey, TData>::Remove(TKey _Key)
     delete node;
 
     return;
+};
+
+template<class TKey, class TData>
+TNode<TKey, TData>* TList<TKey, TData>::GetpFirst() const
+{
+    return pFirst;
 };
 
 template<class TKey, class TData>

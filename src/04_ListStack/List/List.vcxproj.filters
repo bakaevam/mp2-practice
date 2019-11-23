@@ -13,12 +13,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Includes">
-      <UniqueIdentifier>{4bdf3724-d739-430e-a8b0-f81018d583d6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Includes\Exception.h">
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Includes\TArrayStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\TList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\TListStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Includes\TNode.h">
@@ -30,19 +38,8 @@
     <ClInclude Include="Includes\TStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\TList.h">
+    <ClInclude Include="Includes\Exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\TArrayStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\TListStack.h">
-      <Filter>Header Files\Includes</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

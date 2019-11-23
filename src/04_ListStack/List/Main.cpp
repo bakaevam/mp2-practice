@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-void main()
+int main()
 {
     //// Test PostfixForm ////
     string type;

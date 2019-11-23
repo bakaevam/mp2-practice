@@ -1,7 +1,5 @@
 #ifndef  _TSTACK_H_
 #define _TSTACK_H_
-#include "TArrayStack.h"
-#include "TListStack.h"
 
 template<class ValType> class TArrayStack;
 template<class ValType> class TListStack;
@@ -9,7 +7,7 @@ template<class ValType> class TListStack;
 enum StackType
 {
     Array,
-    List,
+    List
 };
 
 template<class ValType>
@@ -33,11 +31,11 @@ TStack<ValType>* TStack<ValType>::Create(StackType type)
     if (type == Array)
     {
         return new TArrayStack<ValType>(100);
-    }
+    };
     if (type == List)
     {
         return new TListStack<ValType>();
-    }
+    };
     throw Exception_errors(" Stack Type isn't correct");
 };
 
