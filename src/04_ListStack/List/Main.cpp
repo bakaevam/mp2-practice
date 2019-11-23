@@ -1,6 +1,6 @@
-#include "TStack.h"
-#include "TPost.h"
-#include "Exception.h"
+#include "Includes\Exception.h"
+#include "Includes\TPost.h"
+#include "Includes\TList.h"
 #include <iostream>
 using namespace std;
 
@@ -46,4 +46,4 @@ void main()
     };
 
     cin.get();
-};
+}

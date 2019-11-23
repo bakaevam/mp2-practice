@@ -13,26 +13,24 @@ public:
 
     TNode();
     TNode(const TNode&);
-    TNode(TKey, TData*);
+    TNode(TKey, TData*, TNode* node = nullptr);
     ~TNode();
-
-    void Output();
 };
 //////////////////////////////////////////////////////////
 template<class TKey, class TData>
 TNode<TKey, TData>::TNode()
 {
-    Key = nullptr;
+    Key = 0;
     data = nullptr;
     pNext = nullptr;
 };
 
 template<class TKey, class TData>
-TNode<TKey, TData>::TNode(TKey _key, TData* _data)
+TNode<TKey, TData>::TNode(TKey _key, TData* _data, TNode<TKey, TData>* node)
 {
     Key = _key;
     data = _data;
-    pNext = nullptr;
+    pNext = node;
 };
 
 template<class TKey, class TData>
@@ -51,10 +49,4 @@ TNode<TKey, TData>::~TNode()
     pNext = nullptr;
 };
 
-template<class TKey, class TData>
-void TNode<TKey, TData>::Output()
-{
-    cout << " \n" << this->Key;
-    cout << " \n   |\n";
-}
 #endif

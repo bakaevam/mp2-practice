@@ -142,10 +142,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Exception.h" />
-    <ClInclude Include="TNode.h" />
-    <ClInclude Include="TPost.h" />
-    <ClInclude Include="TStack.h" />
+    <ClInclude Include="Includes\Exception.h" />
+    <ClInclude Include="Includes\TArrayStack.h" />
+    <ClInclude Include="Includes\TList.h" />
+    <ClInclude Include="Includes\TListStack.h" />
+    <ClInclude Include="Includes\TNode.h" />
+    <ClInclude Include="Includes\TPost.h" />
+    <ClInclude Include="Includes\TStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

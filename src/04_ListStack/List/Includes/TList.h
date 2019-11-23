@@ -1,11 +1,11 @@
-#ifndef _TLIST_H_
+#ifndef  _TLIST_H_
 #define _TLIST_H_
+#include <iostream>
 #include "TNode.h"
 #include "Exception.h"
-#include <iostream>
 using namespace std;
 
-template<class TKey, class TData>
+template<typename TKey, class TData>
 class TList
 {
 private:
@@ -31,11 +31,14 @@ public:
     bool IsEnded() const;
     void Next();
 
-	template<class TKey, class TData>
+    template<class TKey, class TData>
     friend ostream& operator<<(ostream& os, TList<TKey, TData>& tmp);
+
+    //template<class ValType>
+    //friend class TListStack;
 };
 
-template<class TKey, class TData>
+template<typename TKey, typename TData>
 TList<TKey, TData>::TList()
 {
     pFirst = nullptr;
@@ -44,7 +47,7 @@ TList<TKey, TData>::TList()
     pNext = nullptr;
 };
 
-template<class TKey, class TData>
+template<typename TKey, typename TData>
 TList<TKey, TData>::TList(const TList& _list)
 {
     pCurr = nullptr;
@@ -84,26 +87,26 @@ TList<TKey, TData>::TList(const TNode<TKey, TData>* _first)
     pPrev = nullptr;
     pNext = nullptr;
 
-	if (!_first)
-		pFirst = nullptr;
-	else
-	{
-		TNode<TKey, TData>* node = new TNode<TKey, TData>(*_first);
-		pFirst = node;
-		TNode<TKey, TData>* prev = pFirst;
-		TNode<TKey, TNode>* i = _first->pNext;
+    if (!_first)
+        pFirst = nullptr;
+    else
+    {
+        TNode<TKey, TData>* node = new TNode<TKey, TData>(*_first);
+        pFirst = node;
+        TNode<TKey, TData>* prev = pFirst;
+        TNode<TKey, TNode>* i = _first->pNext;
 
-		while (i)
-		{
-			TNode<TKey, TNode>* tmp = new TNode<TKey, TData>(*i);
-			prev->pNext = tmp;
-			prev = tmp;
-			i = i->pNext;
-		}
+        while (i)
+        {
+            TNode<TKey, TNode>* tmp = new TNode<TKey, TData>(*i);
+            prev->pNext = tmp;
+            prev = tmp;
+            i = i->pNext;
+        }
 
-		pCurr = pFirst;
-		pNext = pCurr->pNext;
-	}
+        pCurr = pFirst;
+        pNext = pCurr->pNext;
+    }
 };
 
 template<class TKey, class TData>
@@ -126,9 +129,9 @@ TList<TKey, TData>::~TList()
 template<class TKey, class TData>
 TNode<TKey, TData>* TList<TKey, TData>::Search(TKey _key)
 {
-	TNode<TKey, TData>* prev = pPrev;
-	TNode<TKey, TData>* next = pNext;
-	TNode<TKey, TData>* curr = pCurr;
+    TNode<TKey, TData>* prev = pPrev;
+    TNode<TKey, TData>* next = pNext;
+    TNode<TKey, TData>* curr = pCurr;
 
     Reset();
     while (!IsEnded())
@@ -144,9 +147,9 @@ TNode<TKey, TData>* TList<TKey, TData>::Search(TKey _key)
         Next();
     };
 
-	pPrev = prev;
-	pNext = next;
-	pCurr = curr;
+    pPrev = prev;
+    pNext = next;
+    pCurr = curr;
 
     return nullptr;
 };
@@ -177,7 +180,7 @@ void TList<TKey, TData>::InsertToEnd(TKey _Key, TData* _data)
     TNode<TKey, TData>* curr = pCurr;
 
     TNode<TKey, TData>* node = new TNode<TKey, TData>(_Key, _data);
-    
+
     if (!pFirst)
         pFirst = node;
     else
@@ -375,7 +378,7 @@ void TList<TKey, TData>::Next()
     pPrev = pCurr;
     pCurr = pNext;
 
-    if(pCurr)
+    if (pCurr)
         pNext = pCurr->pNext;
     else
         pNext = nullptr;;
@@ -404,4 +407,5 @@ ostream& operator<<(ostream& os, TList<TKey, TData>& tmp)
 
     return os;
 }
-#endif 
+
+#endif

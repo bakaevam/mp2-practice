@@ -23,11 +23,11 @@ void main()
 
 
     L1.InsertAfter(3, 4, a);
-    cout << "  Insert after key 3: ";
+    cout << "  Insert 4 after key 3: ";
 	cout << L1;
 	try
 	{
-		cout << "  Insert after key 25: ";
+		cout << "  Insert 4 after key 25: ";
 		L1.InsertAfter(25, 4, a);
 		cout << L1;
 	}
@@ -37,11 +37,11 @@ void main()
 	};
 
     L2.InsertBefore(2, 1, a);
-    cout << "  Insert before key 2: ";
+    cout << "  Insert 1 before key 2: ";
 	cout << L2;
 
     L2.InsertBefore(3, 10, a);
-    cout << "  Insert before key 3: ";
+    cout << "  Insert 10 before key 3: ";
 	cout << L2;
 
     L2.Remove(10);

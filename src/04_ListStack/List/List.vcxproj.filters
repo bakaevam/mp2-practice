@@ -18,16 +18,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Exception.h">
-      <Filter>Header Files\Includes</Filter>
+    <ClInclude Include="Includes\Exception.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TNode.h">
-      <Filter>Header Files\Includes</Filter>
+    <ClInclude Include="Includes\TNode.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TPost.h">
-      <Filter>Header Files\Includes</Filter>
+    <ClInclude Include="Includes\TPost.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TStack.h">
+    <ClInclude Include="Includes\TStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\TList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\TArrayStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\TListStack.h">
       <Filter>Header Files\Includes</Filter>
     </ClInclude>
   </ItemGroup>
