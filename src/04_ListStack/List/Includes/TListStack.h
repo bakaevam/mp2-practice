@@ -41,7 +41,7 @@ TListStack<ValType>::TListStack(const TListStack<ValType>& tmp)
 template<class ValType>
 TListStack<ValType>::~TListStack()
 {
-    delete[] ListElem;
+    delete ListElem;
 };
 
 template<class ValType>
@@ -74,16 +74,26 @@ void TListStack<ValType>::Pop()
 template<class ValType>
 bool TListStack<ValType>::IsEmpty() const
 {
-    if (ListElem->GetpFirst() == nullptr)
-        return true;
-    else return false;
+    return (ListElem->GetpFirst() == nullptr);
 };
 
 template<class ValType>
 bool TListStack<ValType>::IsFull() const
 {
-    TNode<ValType, ValType>* tmp = new TNode<ValType, ValType>();
-    return !tmp;
+	try
+	{
+		TNode<ValType, ValType>* tmp = new TNode<ValType, ValType>();
+		if (tmp == nullptr)
+		{
+			return true;
+		}
+		delete tmp;
+		return false;
+	}
+	catch (...)
+	{
+		return true;
+	}
 };
 
 #endif

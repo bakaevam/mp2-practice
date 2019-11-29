@@ -1,6 +1,8 @@
 #ifndef  _TSTACK_H_
 #define _TSTACK_H_
 
+#define MAX_LEN 100
+
 template<class ValType> class TArrayStack;
 template<class ValType> class TListStack;
 
@@ -28,15 +30,18 @@ public:
 template<class ValType>
 TStack<ValType>* TStack<ValType>::Create(StackType type)
 {
-    if (type == Array)
-    {
-        return new TArrayStack<ValType>(100);
-    };
-    if (type == List)
+	if (type == Array)
+	{
+		return new TArrayStack<ValType>(MAX_LEN);
+	}
+    else if (type == List)
     {
         return new TListStack<ValType>();
-    };
-    throw Exception_errors(" Stack Type isn't correct");
+    }
+	else
+	{
+		throw Exception_errors(" Stack Type isn't correct");
+	}
 };
 
 #endif

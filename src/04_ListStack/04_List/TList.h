@@ -59,8 +59,7 @@ TList<TKey, TData>::TList(const TList& _list)
         pFirst->pNext = nullptr;
         pCurr = pFirst;
 
-        TNode<TKey, TData>* i = new TNode<TKey, TData>;
-        i = _list.pFirst;
+        TNode<TKey, TData>* i = _list.pFirst;
 
         while (i->pNext)
         {
@@ -162,7 +161,6 @@ void TList<TKey, TData>::InsertToStart(TKey _Key, TData* _data)
     };
 
     TNode<TKey, TData>* node = new TNode<TKey, TData>(_Key, _data, pFirst);
-    node->pNext = pFirst;
     if (pCurr == pFirst)
         pPrev = node;
     pFirst = node;
@@ -212,7 +210,7 @@ void TList<TKey, TData>::InsertAfter(TKey _Key, TKey newKey, TData* _data)
     while (pCurr != node)
         Next();
 
-    TNode<TKey, TData>* _node = new TNode<TKey, TData>(newKey, _data);
+    TNode<TKey, TData>* _node = new TNode<TKey, TData>(newKey, _data, node->pNext);
     pCurr->pNext = _node;
 
     if (curr == pCurr)
@@ -368,9 +366,7 @@ void TList<TKey, TData>::Reset()
 template<class TKey, class TData>
 bool TList<TKey, TData>::IsEnded() const
 {
-    if (pCurr == nullptr)
-        return true;
-    return false;
+	return (pCurr == nullptr);
 };
 
 template<class TKey, class TData>
