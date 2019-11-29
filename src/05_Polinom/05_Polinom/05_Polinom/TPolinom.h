@@ -51,11 +51,6 @@ TPolinom::TPolinom(const string Userstr)
     {
         do
         {
-            if (s[i] == ' ')
-            {
-                i++;
-                continue;
-            };
 
             if (s[i] == '^')
             {
@@ -112,7 +107,7 @@ TPolinom::TPolinom(const string Userstr)
             continue;
         };
 
-        if ((zf == true) && ((s[i] == 'y') || (s[i] == 'x')))
+        if ((zf == true) && !(isdigit(s[i])))
         {
             zf = false;
             deg += 1;
@@ -165,6 +160,12 @@ TPolinom::TPolinom(const string Userstr)
 
             continue;
         };
+
+		if (s[i] == ' ')
+		{
+			i++;
+			continue;
+		};
 
     }while (!((s[i] == '+') || (s[i] == '-')) && (i != s.length()));
 

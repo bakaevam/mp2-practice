@@ -21,9 +21,7 @@ public:
     ~TList();
 
     void Simple();
-    void MergeSort(TNode<int, float>**);
-    void Merge(TNode<int, float>*, TNode<int, float>*, TNode<int, float>**);
-    void Middle(TNode<int, float>*, TNode<int, float>**, TNode<int, float>**);
+    void Sort(TNode<int, float>*);
     TNode<int, float>* Search(int);
     void InsertToStart(int, float);
     void InsertToEnd(int, float);
@@ -174,102 +172,10 @@ void TList<int, float>::Simple()
     pNext = next;
 };
 
-void TList<int, float>::MergeSort(TNode<int, float>** head)
+
+void TList<int, float>::Sort(TNode<int, float>* first)
 {
-    TNode<int, float> *low = nullptr;
-    TNode<int, float> *high = nullptr;
-    if ((*head == nullptr) || ((*head)->pNext == nullptr)) {
-        return;
-    }
-    Middle(*head, &low, &high);
-    MergeSort(&low);
-    MergeSort(&high);
-    Merge(low, high, head);
-};
 
-void TList<int, float>::Middle(TNode<int, float>* src, TNode<int, float>** low, TNode<int, float>** high)
-{
-    TNode<int, float> *fast = nullptr;
-    TNode<int, float> *slow = nullptr;
-
-    if (src == nullptr || src->pNext == nullptr)
-    {
-        (*low) = src;
-        (*high) = nullptr;
-        return;
-    }
-
-    slow = src;
-    fast = src->pNext;
-
-    while (fast != nullptr) 
-    {
-        fast = fast->pNext;
-        if (fast != nullptr) {
-            fast = fast->pNext;
-            slow = slow->pNext;
-        }
-    }
-
-    (*low) = src;
-    (*high) = slow->pNext;
-    slow->pNext = nullptr;
-};
-
-void TList<int, float>::Merge(TNode<int, float>* a, TNode<int, float>* b, TNode<int, float>** c)
-{
-    TNode<int, float> tmp;
-    *c = nullptr;
-    if (a == nullptr)
-    {
-        *c = b;
-        return;
-    }
-
-    if (b == nullptr)
-    {
-        *c = a;
-        return;
-    }
-
-    if (a->Key < b->Key)
-    {
-        *c = a;
-        a = a->pNext;
-    }
-    else
-    {
-        *c = b;
-        b = b->pNext;
-    };
-
-    tmp.pNext = *c;
-    while (a && b) {
-        if (a->Key < b->Key) {
-            (*c)->pNext = a;
-            a = a->pNext;
-        }
-        else {
-            (*c)->pNext = b;
-            b = b->pNext;
-        }
-        (*c) = (*c)->pNext;
-    }
-    if (a) {
-        while (a) {
-            (*c)->pNext = a;
-            (*c) = (*c)->pNext;
-            a = a->pNext;
-        }
-    }
-    if (b) {
-        while (b) {
-            (*c)->pNext = b;
-            (*c) = (*c)->pNext;
-            b = b->pNext;
-        }
-    }
-    *c = tmp.pNext;
 };
 
 TNode<int, float>* TList<int, float>::Search(int _key)
