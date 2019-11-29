@@ -176,6 +176,10 @@ void TList<TKey, TData>::InsertToEnd(TKey _Key, TData* _data)
     TNode<TKey, TData>* next = pNext;
     TNode<TKey, TData>* curr = pCurr;
 
+    Reset();
+    while (pNext)
+        Next();
+
     TNode<TKey, TData>* node = new TNode<TKey, TData>(_Key, _data);
     
     if (!pFirst)
