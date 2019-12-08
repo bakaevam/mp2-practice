@@ -26,7 +26,6 @@ public:
     TPolinom operator*(const TPolinom&);
     
     friend ostream& operator<<(ostream& os, TPolinom& tmp);
-    friend istream& operator >> (istream& is, const TPolinom& tmp);
 };
 
 
@@ -267,7 +266,7 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
     TNode<int, float>* i = tmp.monoms->GetpCurr();
     TPolinom res(*this);
 
-    tmp.monoms->Reset();
+    //tmp.monoms->Reset();
     while (!tmp.monoms->IsEnded())
     {
         res.monoms->Reset();
@@ -303,23 +302,33 @@ TPolinom TPolinom::operator-(const TPolinom& tmp)
     TNode<int, float>* i = tmp.monoms->GetpCurr();
     TPolinom res(*this);
 
-    tmp.monoms->Reset();
     while (!tmp.monoms->IsEnded())
     {
         res.monoms->Reset();
-        while ((!res.monoms->IsEnded()) && (tmp.monoms->GetpCurr()->Key != res.monoms->GetpCurr()->Key))
+        while (!(res.monoms->IsEnded()) && (tmp.monoms->GetpCurr()->Key >= res.monoms->GetpCurr()->Key))
             res.monoms->Next();
 
-        if (res.monoms->IsEnded())
+        float node = tmp.monoms->GetpCurr()->data * (-1);
+
+        if (res.monoms->GetpCurr() != nullptr)
         {
-            res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
+            res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, node);
             tmp.monoms->Next();
             continue;
         };
+        if (res.monoms->GetpCurr() == nullptr)
+        {
+            res.monoms->InsertBefore(res.monoms->GetpPrev()->Key,
+                tmp.monoms->GetpCurr()->Key, node);
+            tmp.monoms->Next();
+            continue;
+        }
 
-        res.monoms->GetpCurr()->data -= tmp.monoms->GetpCurr()->data;
+        res.monoms->InsertBefore(res.monoms->GetpCurr()->Key,
+            tmp.monoms->GetpCurr()->Key, node);
         tmp.monoms->Next();
     };
+    res.Simplification();
     res.StandartView();
 
     return res;
@@ -390,6 +399,9 @@ ostream& operator<<(ostream& os,TPolinom& tmp)
         if (tmp.monoms->GetpCurr() == tmp.monoms->GetpFirst())
         {
             if (tmp.monoms->GetpCurr()->data != 1)
+                if (tmp.monoms->GetpCurr()->Key == 0)
+                    os << tmp.monoms->GetpCurr()->data;
+                else
                 os << tmp.monoms->GetpCurr()->data << "*";
         }
         else

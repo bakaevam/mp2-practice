@@ -156,37 +156,21 @@ void TList<int, float>::Simple()
 
     while (!IsEnded())
     {
-        TNode<int, float>* tmpPrev = nullptr;
         TNode<int, float>* tmp = pFirst;
 
-        if (tmp == pCurr)
-        {
-            tmpPrev = tmp;
-            tmp = tmp->pNext;
-        }
-
-        while (tmp->Key != pCurr->Key)
-        {
-            if (tmp->pNext == pCurr)
+            while ((tmp->Key != pCurr->Key))
             {
-                tmpPrev = tmp->pNext;
-                tmp = tmp->pNext->pNext;
-            }
-            else
-            {
-                tmpPrev = tmp;
                 tmp = tmp->pNext;
-            }
-        }
+            };
+
+            if (tmp == pCurr)
+            {
+                Next();
+                continue;
+            };
 
             pCurr->data += tmp->data;
-            if (pNext != tmp)
-                tmpPrev->pNext = tmp->pNext;
-            else
-            {
-                pNext = tmp->pNext;
-                tmpPrev->pNext = tmp->pNext;
-            }
+            Remove(tmp->Key);
             Next();
     };
 };
@@ -200,24 +184,35 @@ void TList<int, float>::Sort()
         return;
 
     Reset();
-    bool isDone = false;
 
-    while (pCurr->pNext)
+    TNode<int, float>* t, *m, *a, *b;
+    for (bool isDone = true; isDone;)
     {
-        while (!isDone)
-        {
-            isDone = true;
-            if (pCurr->Key > pNext->Key)
-            {
-                isDone = false;
-                TNode<int, float>* tmp = pCurr;
-                pCurr = pCurr->pNext;
-                pCurr->pNext = tmp;
-            }
-        }
-        pCurr = pCurr->pNext;
-    }
+        isDone = false;
+        a = t = pFirst;
+        b = pFirst->pNext;
 
+        while (b != nullptr)
+        {
+            if (a->Key < b->Key)
+            {
+                if (t == a)
+                    pFirst = b;
+                else t->pNext = b;
+
+                a->pNext = b->pNext;
+                b->pNext = a;
+
+                m = a;
+                a = b;
+                b = m;
+                isDone = true;
+            }
+            t = a;
+            a = a->pNext;
+            b = b->pNext;
+        }
+   }
 };
 
 void TList<int, float>::swap(TNode<int, float>* a, TNode<int, float>* b)
@@ -439,7 +434,10 @@ void TList<int, float>::Remove(int _Key)
             pFirst = pCurr;
             return;
         }
-        delete pFirst;
+
+        TNode<int, float>* node = pFirst;
+        pFirst = pFirst->pNext;
+        delete node;
 
         return;
     }

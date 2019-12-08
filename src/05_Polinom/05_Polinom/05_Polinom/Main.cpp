@@ -39,6 +39,6 @@ void main()
     }
     cout << "  p1 * p4 =" << p1 * p4 << endl;
     p3.StandartView();
-    cout << p3;
+    cout << "Sort p3: " << p3;
     cin.get();
 }
