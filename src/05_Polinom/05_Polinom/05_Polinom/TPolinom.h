@@ -67,12 +67,18 @@ TPolinom::TPolinom(const string Userstr)
 
         if (s[i] == 'x')
         {
-            i++;
+            if ((i + 1) != s.length())
+            {
+                i++;
+                xf = true;
+                yf = false;
+                zf = false;
+
+                continue;
+            }
             xf = true;
             yf = false;
             zf = false;
-
-            continue;
         };
 
         if ((xf == true) && ((s[i] == 'y') || (s[i] == 'z')))
@@ -81,14 +87,38 @@ TPolinom::TPolinom(const string Userstr)
             deg += 100;
         };
 
+        if ((xf == true) && (isdigit(s[i])))
+        {
+            if ((s[i] - 48) > 9)
+                throw Exception_errors("  Degree should be no more then 9");
+
+            deg += ((int)s[i] - 48) * 100;
+            xf = false;
+            i++;
+            continue;
+        };
+
+        if (((i + 1) == s.length()) && (xf == true))
+        {
+            xf = false;
+            deg += 100;
+            i++;
+        };
+
         if (s[i] == 'y')
         {
-            i++;
+            if ((i + 1) != s.length())
+            {
+                i++;
+                xf = false;
+                yf = true;
+                zf = false;
+
+                continue;
+            }
             xf = false;
             yf = true;
             zf = false;
-
-            continue;
         };
 
         if ((yf == true) && ((s[i] == 'x') || (s[i] == 'z')))
@@ -97,20 +127,64 @@ TPolinom::TPolinom(const string Userstr)
             deg += 10;
         };
 
+        if ((yf == true) && (isdigit(s[i])))
+        {
+            if ((s[i] - 48) > 9)
+                throw Exception_errors("  Degree should be no more then 9");
+
+            deg += ((int)s[i] - 48) * 10;
+            yf = false;
+            i++;
+
+            continue;
+        };
+
+        if (((i + 1) == s.length()) && (yf == true))
+        {
+            yf = false;
+            deg += 10;
+            i++;
+        };
+
         if (s[i] == 'z')
         {
-            i++;
+            if ((i + 1) != s.length())
+            {
+                i++;
+                xf = false;
+                yf = false;
+                zf = true;
+
+                continue;
+            }
             xf = false;
             yf = false;
             zf = true;
-
-            continue;
         };
 
         if ((zf == true) && !(isdigit(s[i])))
         {
             zf = false;
             deg += 1;
+        };
+
+        if ((zf == true) && (isdigit(s[i])))
+        {
+            if ((s[i] - 48) > 9)
+                throw Exception_errors("  Degree should be no more then 9");
+
+            deg += ((int)s[i] - 48);
+            zf = false;
+            i++;
+
+            continue;
+        };
+
+        if (((i + 1) == s.length()) && (zf == true))
+        {
+            zf = false;
+            deg += 1;
+            i++;
         };
 
         if (s[i] == '+')
@@ -126,48 +200,13 @@ TPolinom::TPolinom(const string Userstr)
             continue;
         };
 
-        if ((xf == true) && (isdigit(s[i])))
-        {
-            if ((s[i] - 48) > 9)
-                throw Exception_errors("  Degree should be no more then 9");
-
-            deg += ((int)s[i] - 48) * 100;
-            xf = false;
-            i++;
-            continue;
-        };
-
-        if ((yf == true) && (isdigit(s[i])))
-        {
-            if ((s[i] - 48) > 9)
-                throw Exception_errors("  Degree should be no more then 9");
-
-            deg += ((int)s[i] - 48) * 10;
-            yf = false;
-            i++;
-
-            continue;
-        };
-
-        if ((zf == true) && (isdigit(s[i])))
-        {
-            if ((s[i] - 48) > 9)
-                throw Exception_errors("  Degree should be no more then 9");
-
-            deg += ((int)s[i] - 48);
-            zf = false;
-            i++;
-
-            continue;
-        };
-
 		if (s[i] == ' ')
 		{
 			i++;
 			continue;
 		};
 
-    }while (!((s[i] == '+') || (s[i] == '-')) && (i != s.length()));
+    }while (!((s[i] == '+') || (s[i] == '-')) && (i != s.length()) && (!xf || !yf || !zf));
 
                 monoms->InsertToEnd(deg, coeff);
                 coeff = 1;
@@ -207,7 +246,7 @@ void TPolinom::Simplification()
 
 void TPolinom::StandartView()
 {
-    monoms->MergeSort((monoms->GetpFirst()));
+    monoms->Sort();
 };
 
 const TPolinom& TPolinom::operator=(const TPolinom& tmp)
@@ -232,19 +271,28 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
     while (!tmp.monoms->IsEnded())
     {
         res.monoms->Reset();
-        while ((!res.monoms->IsEnded()) && (tmp.monoms->GetpCurr()->Key != res.monoms->GetpCurr()->Key))
+        while (!(res.monoms->IsEnded()) && (tmp.monoms->GetpCurr()->Key >= res.monoms->GetpCurr()->Key))
             res.monoms->Next();
 
-        if (res.monoms->IsEnded())
+        if (res.monoms->GetpCurr() != nullptr)
         {
             res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
             tmp.monoms->Next();
             continue;
         };
+        if (res.monoms->GetpCurr() == nullptr)
+        {
+            res.monoms->InsertBefore(res.monoms->GetpPrev()->Key,
+                tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
+            tmp.monoms->Next();
+            continue;
+        }
 
-        res.monoms->GetpCurr()->data += tmp.monoms->GetpCurr()->data;
+        res.monoms->InsertBefore(res.monoms->GetpCurr()->Key,
+            tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
         tmp.monoms->Next();
     };
+    res.Simplification();
 
     return res;
 };
@@ -272,7 +320,55 @@ TPolinom TPolinom::operator-(const TPolinom& tmp)
         res.monoms->GetpCurr()->data -= tmp.monoms->GetpCurr()->data;
         tmp.monoms->Next();
     };
+    res.StandartView();
 
+    return res;
+};
+
+TPolinom TPolinom::operator*(const TPolinom& tmp)
+{
+    TPolinom res;
+
+    monoms->Reset();
+    while (!monoms->IsEnded())
+    {
+        tmp.monoms->Reset();
+        while (!tmp.monoms->IsEnded())
+        {
+            float newCoeff = tmp.monoms->GetpCurr()->data * monoms->GetpCurr()->data;
+            int degX = 0;
+            int degY = 0;
+            int degZ = 0;
+            int deg = tmp.monoms->GetpCurr()->Key;
+
+            degX = deg / 100;
+            degY = (deg % 100) / 10;
+            degZ = deg % 10;
+
+            int _degX = 0;
+            int _degY = 0;
+            int _degZ = 0;
+            int _deg = monoms->GetpCurr()->Key;
+
+            _degX = _deg / 100;
+            _degY = (_deg % 100) / 10;
+            _degZ = _deg % 10;
+
+            if ((degX + _degX > 9) || ((degY + _degY > 9) || (degZ + _degZ > 9)))
+            {
+                throw Exception_errors("  Degree shouldn't exceed 9");
+                return nullptr;
+            };
+
+            int newDeg = (degX + _degX) * 100 + (degY + _degY) * 10 + (degZ + _degZ);
+            res.monoms->InsertToEnd(newDeg, newCoeff);
+            tmp.monoms->Next();
+        }
+        monoms->Next();
+    }
+
+    res.Simplification();
+    res.StandartView();
     return res;
 };
 
@@ -321,23 +417,45 @@ ostream& operator<<(ostream& os,TPolinom& tmp)
                 os << tmp.monoms->GetpCurr()->data;
         };
 
+        if (tmp.monoms->GetpCurr()->pNext != nullptr)
+        {
             if ((degX != 1) && (degX != 0))
                 os << "x^" << degX << "*";
-            if (degX == 1)
+            if ((degX == 1) && (degY == 0) && (degZ == 0))
+                os << "x";
+            if ((degX == 1) && (degY != 0) && (degZ != 0))
                 os << "x" << "*";
 
             if ((degY != 1) && (degY != 0))
                 os << "y^" << degY << "*";
-            if (degY == 1)
+            if ((degY == 1) && (degZ == 0))
+                os << "y";
+            if ((degY == 1) && (degZ != 0))
                 os << "y" << "*";
 
             if ((degZ != 1) && (degZ != 0))
                 os << "z^" << degZ;
             if (degZ == 1)
                 os << "z";
+        }
+        else
+        {
+            if ((degX != 1) && (degX != 0))
+                os << "x^" << degX;
+            if (degX == 1)
+                os << "x";
 
-            //if(tmp.monoms->GetpCurr()->pNext != nullptr)
-              //  cout << " + ";
+            if ((degY != 1) && (degY != 0))
+                os << "y^" << degY;
+            if (degY == 1)
+                os << "y";
+
+            if ((degZ != 1) && (degZ != 0))
+                os << "z^" << degZ;
+            if (degZ == 1)
+                os << "z";
+        }
+
         tmp.monoms->Next();
     };
     os << endl;
