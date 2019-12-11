@@ -7,7 +7,7 @@ using namespace std;
 
 void main()
 {
-    string s1 = "7z^6 + 3x^2yz^6";
+    string s1 = "7z^6 + 3x^2yz^6 - 11x + 2xy + 8y^5z";
     string s2 = "yz^6 + x^2yz^6";
     string s3 = "z^2 + y";
     TList<int, float>* l1 = new TList<int, float>();
@@ -15,6 +15,8 @@ void main()
     l1->InsertToStart(36, 5);
     l1->InsertToEnd(0, 2);
     l1->InsertToEnd(16, -4);
+    l1->InsertToEnd(100, -11);
+    l1->InsertToEnd(50, -4);
 
     TPolinom p1(s1);
     TPolinom p2(p1);
@@ -37,8 +39,6 @@ void main()
     {
         cerr << e.what() << endl;
     }
-    cout << "  p1 * p4 =" << p1 * p4 << endl;
-    p3.StandartView();
-    cout << "Sort p3: " << p3;
+    cout << endl << "  p1 * p4 =" << p1 * p4 << endl;
     cin.get();
 }

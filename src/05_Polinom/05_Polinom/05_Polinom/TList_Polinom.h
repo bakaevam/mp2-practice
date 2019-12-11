@@ -157,21 +157,16 @@ void TList<int, float>::Simple()
     while (!IsEnded())
     {
         TNode<int, float>* tmp = pFirst;
-
-            while ((tmp->Key != pCurr->Key))
-            {
-                tmp = tmp->pNext;
-            };
-
-            if (tmp == pCurr)
-            {
-                Next();
-                continue;
-            };
-
-            pCurr->data += tmp->data;
-            Remove(tmp->Key);
+        while ((tmp->Key != pCurr->Key))
+            tmp = tmp->pNext;
+        if (tmp == pCurr)
+        {
             Next();
+            continue;
+        };
+        pCurr->data += tmp->data;
+        Remove(tmp->Key);
+        Next();
     };
 };
 

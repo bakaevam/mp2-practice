@@ -59,8 +59,13 @@ TPolinom::TPolinom(const string Userstr)
 
         if (isdigit(s[i]) && !xf && !yf && !zf)
         {
-            coeff *= s[i] - 48;
-            i++;
+            string c;
+            while (isdigit(s[i]))
+            {
+                c += s[i];
+                i++;
+            }
+            coeff *= (float)(atof(c.c_str()));
             continue;
         };
 
@@ -80,7 +85,7 @@ TPolinom::TPolinom(const string Userstr)
             zf = false;
         };
 
-        if ((xf == true) && ((s[i] == 'y') || (s[i] == 'z')))
+        if ((xf == true) && ((s[i] == 'y') || (s[i] == 'z') || (s[i] == ' ')))
         {
             xf = false;
             deg += 100;
@@ -120,7 +125,7 @@ TPolinom::TPolinom(const string Userstr)
             zf = false;
         };
 
-        if ((yf == true) && ((s[i] == 'x') || (s[i] == 'z')))
+        if ((yf == true) && ((s[i] == 'x') || (s[i] == 'z') || (s[i] == ' ')))
         {
             yf = false;
             deg += 10;
@@ -161,6 +166,14 @@ TPolinom::TPolinom(const string Userstr)
             zf = true;
         };
 
+        if (((i + 1) == s.length()) && (zf == true))
+        {
+            zf = false;
+            deg += 1;
+            i++;
+            continue;
+        };
+
         if ((zf == true) && !(isdigit(s[i])))
         {
             zf = false;
@@ -179,11 +192,10 @@ TPolinom::TPolinom(const string Userstr)
             continue;
         };
 
-        if (((i + 1) == s.length()) && (zf == true))
+        if((s[i] == ' ') && (zf == true))
         {
             zf = false;
             deg += 1;
-            i++;
         };
 
         if (s[i] == '+')
@@ -211,6 +223,8 @@ TPolinom::TPolinom(const string Userstr)
                 coeff = 1;
                 deg = 0;
     };
+
+    StandartView();
 };
 
 TPolinom::TPolinom(TList<int, float>* tmp)
@@ -226,6 +240,7 @@ TPolinom::TPolinom(TList<int, float>* tmp)
     };
 
     monoms = new TList<int, float>(*tmp);
+    StandartView();
 };
 
 TPolinom::TPolinom(const TPolinom& tmp)
@@ -266,7 +281,6 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
     TNode<int, float>* i = tmp.monoms->GetpCurr();
     TPolinom res(*this);
 
-    //tmp.monoms->Reset();
     while (!tmp.monoms->IsEnded())
     {
         res.monoms->Reset();
@@ -292,7 +306,6 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
         tmp.monoms->Next();
     };
     res.Simplification();
-
     return res;
 };
 
@@ -366,7 +379,6 @@ TPolinom TPolinom::operator*(const TPolinom& tmp)
             if ((degX + _degX > 9) || ((degY + _degY > 9) || (degZ + _degZ > 9)))
             {
                 throw Exception_errors("  Degree shouldn't exceed 9");
-                return nullptr;
             };
 
             int newDeg = (degX + _degX) * 100 + (degY + _degY) * 10 + (degZ + _degZ);
@@ -395,6 +407,12 @@ ostream& operator<<(ostream& os,TPolinom& tmp)
         degX = deg / 100;
         degY = (deg % 100) / 10;
         degZ = deg % 10;
+
+        if (tmp.monoms->GetpCurr()->data == 0)
+        {
+            tmp.monoms->Next();
+            continue;
+        }
 
         if (tmp.monoms->GetpCurr() == tmp.monoms->GetpFirst())
         {
@@ -431,15 +449,20 @@ ostream& operator<<(ostream& os,TPolinom& tmp)
 
         if (tmp.monoms->GetpCurr()->pNext != nullptr)
         {
-            if ((degX != 1) && (degX != 0))
+            if ((degX != 1) && (degY == 0) && (degX != 0))
+                os << "x^" << degX;
+            if ((degX != 1) && (degX != 0) && ((degY != 0) || (degZ != 0)))
                 os << "x^" << degX << "*";
             if ((degX == 1) && (degY == 0) && (degZ == 0))
                 os << "x";
-            if ((degX == 1) && (degY != 0) && (degZ != 0))
+            if ((degX == 1) && ((degY != 0) || (degZ != 0)))
                 os << "x" << "*";
 
-            if ((degY != 1) && (degY != 0))
+
+            if ((degY != 1) && (degY != 0) && (degZ != 0))
                 os << "y^" << degY << "*";
+            if ((degY != 1) && (degZ == 0) && (degY != 0))
+                os << "y^" << degY;
             if ((degY == 1) && (degZ == 0))
                 os << "y";
             if ((degY == 1) && (degZ != 0))
