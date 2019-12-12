@@ -35,9 +35,6 @@ public:
 
     template<class TKey, class TData>
     friend ostream& operator<<(ostream& os, TList<TKey, TData>& tmp);
-
-    template<class ValType>
-    friend class TListStack;
 };
 
 template<typename TKey, typename TData>

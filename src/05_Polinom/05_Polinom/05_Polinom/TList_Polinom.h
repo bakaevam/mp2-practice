@@ -22,8 +22,6 @@ public:
 
     void Simple();
     void Sort();
-    void swap(TNode<int, float>*, TNode<int, float>*);
-    int Count();
     TNode<int, float>*Search(int);
     void InsertToStart(int, float);
     void InsertToEnd(int, float);
@@ -208,53 +206,6 @@ void TList<int, float>::Sort()
             b = b->pNext;
         }
    }
-};
-
-void TList<int, float>::swap(TNode<int, float>* a, TNode<int, float>* b)
-{
-    TNode<int, float>* prev = pPrev;
-    TNode<int, float>* next = pNext;
-    TNode<int, float>* curr = pCurr;
-    Reset();
-
-    TNode<int, float> *aPrev, *aNext, *bPrev, *bNext;
-
-    while (pCurr != a)
-        Next();
-    aPrev = pPrev;
-    aNext = b;
-    Reset();
-
-    bPrev = a;
-    bNext = b->pNext;
-
-    if (a != pFirst)
-    {
-        aPrev->pNext = b;
-        b->pNext = a;
-        a->pNext = bNext;
-    }
-    else
-    {
-        a->pNext = bNext;
-        b->pNext = a;
-        pFirst = b;
-    }
-
-    pPrev = prev;
-    pNext = next;
-};
-
-int TList<int, float>::Count()
-{
-    TNode<int, float>* tmp = pFirst;
-    int count = 0;
-    while (tmp != nullptr)
-    {
-        count++;
-        tmp = tmp->pNext;
-    }
-    return count;
 };
 
 TNode<int, float>* TList<int, float>::Search(int _key)

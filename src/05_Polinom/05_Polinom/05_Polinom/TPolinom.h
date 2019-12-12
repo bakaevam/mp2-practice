@@ -62,8 +62,17 @@ TPolinom::TPolinom(const string Userstr)
             string c;
             while (isdigit(s[i]))
             {
-                c += s[i];
-                i++;
+                if (s[i + 1] == '.')
+                {
+                    c += s[i];
+                    c += s[i + 1];
+                    i = i + 2;
+                }
+                else 
+                {
+                    c += s[i];
+                    i++;
+                }
             }
             coeff *= (float)(atof(c.c_str()));
             continue;

@@ -7,7 +7,7 @@ using namespace std;
 
 void main()
 {
-    string s1 = "7z^6 + 3x^2yz^6 - 11x + 2xy + 8y^5z";
+    string s1 = "7z^6 + 3x^2yz^6 - 11x + 2.1xy + 8y^5z";
     string s2 = "yz^6 + x^2yz^6";
     string s3 = "z^2 + y";
     TList<int, float>* l1 = new TList<int, float>();
@@ -23,9 +23,12 @@ void main()
     TPolinom p3(l1);
     TPolinom p4(s3);
 
+    cout << "  +------------------------------------+\n";
+    cout << "  |\t      -POLINOM TEST-           |\n";
+    cout << "  +------------------------------------+\n" << endl;
+
     try
     {
-        cout << "\t -POLINOM TEST-\n" << endl;
         cout << "  Polinom from string: p1 =" << p1 << endl;
         cout << "  Polinom as copy p1: p2 =" << p2 << endl;
         cout << "  Polinom from list: p3 =" << p3 << endl;
