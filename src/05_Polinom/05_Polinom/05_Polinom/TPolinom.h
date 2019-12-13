@@ -1,6 +1,6 @@
 #ifndef _TPOLINOM_H_
 #define _TPOLINOM_H_
-#include "TList_Polinom.h"
+#include "TList.h"
 #include "TNode_Polinom.h"
 #include <string>
 #include <cstring>
@@ -13,13 +13,14 @@ private:
     TList<int, float>* monoms;
 public:
     TPolinom();
-    TPolinom(const string);
+    TPolinom(const string&);
     TPolinom(TList<int, float>*);
     TPolinom(const TPolinom&);
     ~TPolinom();
 
     void Simplification();
     void StandartView();
+	bool operator==(const TPolinom&) const;
     const TPolinom& operator=(const TPolinom&);
     TPolinom operator+(const TPolinom&);
     TPolinom operator-(const TPolinom&);
@@ -34,7 +35,7 @@ TPolinom::TPolinom()
     monoms = new TList<int, float>();
 };
 
-TPolinom::TPolinom(const string Userstr)
+TPolinom::TPolinom(const string& Userstr)
 {
     monoms = new TList<int, float>();
 
@@ -240,7 +241,7 @@ TPolinom::TPolinom(TList<int, float>* tmp)
 {
     while (!tmp->IsEnded())
     {
-        if (tmp->GetpCurr()->Key > 999)
+        if (tmp->GetpCurr()->Key > 999) // <0 // int -> unsigned int
         {
             throw Exception_errors("  Degree shouldn't exceed 9");
             return;
@@ -264,17 +265,87 @@ TPolinom::~TPolinom()
 
 void TPolinom::Simplification()
 {
-    monoms->Simple();
+	monoms->Reset();
+
+	while (!monoms->IsEnded())
+	{
+		TNode<int, float>* tmp = monoms->GetpFirst();
+		while ((tmp->Key != monoms->GetpCurr()->Key))
+			tmp = tmp->pNext;
+		if (tmp == monoms->GetpCurr())
+		{
+			monoms->Next();
+			continue;
+		};
+		monoms->GetpCurr()->data += tmp->data;
+		monoms->Remove(tmp->Key);
+		monoms->Next();
+	};
 };
 
 void TPolinom::StandartView()
 {
-    monoms->Sort();
+	if (monoms->GetpFirst() == nullptr)
+		return;
+
+	if (monoms->GetpFirst()->pNext == nullptr)
+		return;
+
+	monoms->Reset();
+
+	TNode<int, float>* t, *m, *a, *b;
+	for (bool isDone = true; isDone;)
+	{
+		isDone = false;
+		a = t = monoms->GetpFirst();
+		b = monoms->GetpFirst()->pNext;
+
+		while (b != nullptr)
+		{
+			if (a->Key < b->Key)
+			{
+				if (t == a)
+					monoms->pFirst = b;
+				else t->pNext = b;
+
+				a->pNext = b->pNext;
+				b->pNext = a;
+
+				m = a;
+				a = b;
+				b = m;
+				isDone = true;
+			}
+			t = a;
+			a = a->pNext;
+			b = b->pNext;
+		}
+	}
+};
+
+bool TPolinom::operator==(const TPolinom& tmp) const
+{
+	monoms->Reset();
+	tmp.monoms->Reset();
+
+	if(monoms->Count())
+
+	while (!monoms->IsEnded())
+	{
+		tmp.monoms->Reset();
+		while (!tmp.monoms->IsEnded())
+		{
+			if (monoms->GetpCurr() != tmp.monoms->GetpCurr())
+				return false;
+			tmp.monoms->Next();
+		}
+		monoms->Next();
+	}
 };
 
 const TPolinom& TPolinom::operator=(const TPolinom& tmp)
 {
-    if (this == &tmp)
+    if (*this == tmp) // ==
         return *this;
 
     if (monoms->GetpFirst())
@@ -296,29 +367,22 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
         while (!(res.monoms->IsEnded()) && (tmp.monoms->GetpCurr()->Key >= res.monoms->GetpCurr()->Key))
             res.monoms->Next();
 
-        if (res.monoms->GetpCurr() != nullptr)
+        if (res.monoms->GetpCurr() == nullptr)
         {
             res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
-            tmp.monoms->Next();
-            continue;
-        };
-        if (res.monoms->GetpCurr() == nullptr)
+		}
+		else
         {
             res.monoms->InsertBefore(res.monoms->GetpPrev()->Key,
                 tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
-            tmp.monoms->Next();
-            continue;
         }
-
-        res.monoms->InsertBefore(res.monoms->GetpCurr()->Key,
-            tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
         tmp.monoms->Next();
     };
-    res.Simplification();
+    res.Simplification(); ////////
     return res;
 };
 
-TPolinom TPolinom::operator-(const TPolinom& tmp)
+TPolinom TPolinom::operator-(const TPolinom& tmp) // + (-tmp)
 {
     tmp.monoms->Reset();
     TNode<int, float>* i = tmp.monoms->GetpCurr();

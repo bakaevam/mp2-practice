@@ -7,7 +7,7 @@ template<>
 class TNode<int, float>
 {
 public:
-    int Key;
+    unsigned int Key;
     float data;
     TNode<int, float>* pNext;
 

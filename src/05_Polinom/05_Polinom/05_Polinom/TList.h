@@ -28,6 +28,7 @@ public:
     void Remove(TKey);
     TNode<TKey, TData>* GetpFirst() const;
     TNode<TKey, TData>* GetpCurr() const;
+	int Count() const;
 
     void Reset();
     bool IsEnded() const;
@@ -35,6 +36,7 @@ public:
 
     template<class TKey, class TData>
     friend ostream& operator<<(ostream& os, TList<TKey, TData>& tmp);
+	friend class TPolinom;
 };
 
 template<typename TKey, typename TData>
@@ -366,6 +368,19 @@ template<class TKey, class TData>
 TNode<TKey, TData>* TList<TKey, TData>::GetpCurr() const
 {
     return pCurr;
+};
+
+template<class TKey, class TData>
+int TList<TKey, TData>::Count() const
+{
+	Reset();
+	int count = 0;
+	while (!IsEnded())
+	{
+		count++;
+		Next();
+	}
+	return count;
 };
 
 template<class TKey, class TData>
