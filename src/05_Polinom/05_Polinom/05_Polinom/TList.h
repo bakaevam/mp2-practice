@@ -1,7 +1,7 @@
 #ifndef  _TLIST_H_
 #define _TLIST_H_
 #include <iostream>
-#include "TNode.h"
+#include "TNode_Polinom.h"
 #include "Exception.h"
 using namespace std;
 
@@ -28,7 +28,6 @@ public:
     void Remove(TKey);
     TNode<TKey, TData>* GetpFirst() const;
     TNode<TKey, TData>* GetpCurr() const;
-	int Count() const;
 
     void Reset();
     bool IsEnded() const;
@@ -368,19 +367,6 @@ template<class TKey, class TData>
 TNode<TKey, TData>* TList<TKey, TData>::GetpCurr() const
 {
     return pCurr;
-};
-
-template<class TKey, class TData>
-int TList<TKey, TData>::Count() const
-{
-	Reset();
-	int count = 0;
-	while (!IsEnded())
-	{
-		count++;
-		Next();
-	}
-	return count;
 };
 
 template<class TKey, class TData>

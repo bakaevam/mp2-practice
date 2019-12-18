@@ -1,7 +1,7 @@
 #ifndef  _TLIST_POLINOM_H_
 #define _TLIST_POLINOM_H_
 #include <iostream>
-#include "TNode_Polinom.h"
+#include "TNode.h"
 #include "TList.h"
 #include "Exception.h"
 using namespace std;
@@ -31,6 +31,8 @@ public:
     TNode<int, float>* GetpFirst() const;
     TNode<int, float>* GetpCurr() const;
     TNode<int, float>* GetpPrev() const;
+    int Count();
+    bool operator==(const TList&) const;
 
     void Reset();
     bool IsEnded() const;
@@ -59,9 +61,7 @@ public:
         return os;
     };
     
-
-    template<class ValType>
-    friend class TListStack;
+    friend class TPolinom;
 };
 
 TList<int, float>::TList()
@@ -451,6 +451,31 @@ TNode<int, float>* TList<int, float>::GetpCurr() const
 TNode<int, float>* TList<int, float>::GetpPrev() const
 {
     return pPrev;
+};
+
+int TList<int, float>::Count()
+{
+    Reset();
+    int count = 0;
+    while (!IsEnded())
+    {
+        count++;
+        Next();
+    }
+    return count;
+};
+
+bool TList<int, float>::operator==(const TList& tmp) const
+{
+    TNode<int, float>* i = pFirst;
+    TNode<int, float>* j = tmp.pFirst;
+
+    while (i && j && (*i == *j))
+    {
+        i = i->pNext;
+        j = j->pNext;
+    }
+    return (!(i || j));
 };
 
 void TList<int, float>::Reset()

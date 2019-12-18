@@ -34,6 +34,7 @@ void main()
         cout << "  Polinom from list: p3 =" << p3 << endl;
         cout << "  Polinom from string: p4 =" << p4 << endl;
         cout << "  p1 + p2 =" << p1 + p2 << endl;
+        cout << "  p1 + p4 =" << p1 + p4 << endl;
         cout << "  p1 - p3 =" << p1 - p3 << endl;
         cout << "  p1 * p3 =";
         cout << p1 * p3 << endl;
