@@ -215,7 +215,7 @@ void TList<TKey, TData>::InsertAfter(TKey _Key, TKey newKey, TData* _data)
     while (pCurr != node)
         Next();
 
-    TNode<TKey, TData>* _node = new TNode<TKey, TData>(newKey, _data);
+    TNode<TKey, TData>* _node = new TNode<TKey, TData>(newKey, _data, pCurr->pNext);
     pCurr->pNext = _node;
 
     if (curr == pCurr)

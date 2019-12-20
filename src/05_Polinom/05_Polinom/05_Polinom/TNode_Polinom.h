@@ -23,7 +23,7 @@ public:
 
     bool operator!=(const TNode&) const;
     bool operator==(const TNode&) const;
-    bool operator>=(const TNode&) const;
+    bool operator<=(const TNode&) const;
 
     TNode<int, float>* operator*(const TNode&);
 };
@@ -39,9 +39,9 @@ bool TNode<int, float>::operator==(const TNode& tmp) const
     return ((this->Key == tmp.Key) && (this->data == tmp.data));
 };
 
-bool TNode<int, float>::operator>=(const TNode& tmp) const
+bool TNode<int, float>::operator<=(const TNode& tmp) const
 {
-    return (this->Key >= tmp.Key);
+    return (this->Key <= tmp.Key);
 };
 
 TNode<int, float>* TNode<int, float>::operator*(const TNode& tmp)

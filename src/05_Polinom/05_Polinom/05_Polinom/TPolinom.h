@@ -303,7 +303,7 @@ void TPolinom::StandartView()
 
 		while (b != nullptr)
 		{
-			if (a->Key < b->Key)
+			if (a->Key > b->Key)
 			{
 				if (t == a)
 					monoms->pFirst = b;
@@ -341,10 +341,11 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
     tmp.monoms->Reset();
     TPolinom res(*this);
 
+
     while (!tmp.monoms->IsEnded())
     {
         res.monoms->Reset();
-        while (!(res.monoms->IsEnded()) && (tmp.monoms->GetpCurr() >= res.monoms->GetpCurr()))
+        while (!(res.monoms->IsEnded()) && (tmp.monoms->GetpCurr() <= res.monoms->GetpCurr()))
             res.monoms->Next();
 
         if (res.monoms->GetpCurr() == nullptr)
@@ -353,20 +354,21 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
 		}
 		else
         {
-            TNode<int, float>* curr = res.monoms->pCurr;
+          /*  TNode<int, float>* curr = res.monoms->pCurr;
             while (!res.monoms->IsEnded() && (res.monoms->pCurr->Key != tmp.monoms->GetpCurr()->Key))
-                res.monoms->Next();
+                tmp.monoms->Next();
 
             if(res.monoms->pCurr != nullptr)
                 res.monoms->pCurr->data += tmp.monoms->GetpCurr()->data;
             else
             {
-                res.monoms->pCurr = curr;
+                res.monoms->pCurr = curr;*/
                 res.monoms->InsertBefore(res.monoms->GetpCurr()->Key,
                     tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
-            }
+            //}
         }
         tmp.monoms->Next();
+		//cout << res.monoms->pCurr->Key;
     };
    // res.StandartView();
     return res;
