@@ -368,7 +368,7 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
         }
         tmp.monoms->Next();
     };
-    res.StandartView();
+   // res.StandartView();
     return res;
 };
 
