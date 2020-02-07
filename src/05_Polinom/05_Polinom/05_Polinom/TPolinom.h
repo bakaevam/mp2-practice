@@ -338,39 +338,65 @@ const TPolinom& TPolinom::operator=(const TPolinom& tmp)
 
 TPolinom TPolinom::operator+(const TPolinom& tmp)
 {
+    TPolinom res;
+
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int resLength = (tmp.monoms->Count() + monoms->Count());
+    int firstLength = monoms->Count();
+    int secondLength = tmp.monoms->Count();
+
     tmp.monoms->Reset();
-    TPolinom res(*this);
+    monoms->Reset();
 
-
-    while (!tmp.monoms->IsEnded())
+    while(k < resLength)
     {
-        res.monoms->Reset();
-        while (!(res.monoms->IsEnded()) && (tmp.monoms->GetpCurr() <= res.monoms->GetpCurr()))
-            res.monoms->Next();
+        if ((tmp.monoms->GetpCurr() == nullptr) && (monoms->GetpCurr() == nullptr))
+        {
+            k++;
+            continue;
+        }
 
-        if (res.monoms->GetpCurr() == nullptr)
+        if ((i > firstLength - 1) && (tmp.monoms->GetpCurr() != nullptr))
         {
             res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
-		}
-		else
-        {
-          /*  TNode<int, float>* curr = res.monoms->pCurr;
-            while (!res.monoms->IsEnded() && (res.monoms->pCurr->Key != tmp.monoms->GetpCurr()->Key))
-                tmp.monoms->Next();
-
-            if(res.monoms->pCurr != nullptr)
-                res.monoms->pCurr->data += tmp.monoms->GetpCurr()->data;
-            else
-            {
-                res.monoms->pCurr = curr;*/
-                res.monoms->InsertBefore(res.monoms->GetpCurr()->Key,
-                    tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
-            //}
+            tmp.monoms->Next();
+            j++;
+            continue;
         }
-        tmp.monoms->Next();
-		//cout << res.monoms->pCurr->Key;
-    };
-   // res.StandartView();
+        else if ((j > secondLength - 1) && (monoms->GetpCurr() != nullptr))
+        {
+            res.monoms->InsertToEnd(monoms->GetpCurr()->Key, monoms->GetpCurr()->data);
+            monoms->Next();
+            i++;
+             continue;
+        }
+
+        if (monoms->GetpCurr()->Key < tmp.monoms->GetpCurr()->Key)
+        {
+                res.monoms->InsertToEnd(monoms->GetpCurr()->Key, monoms->GetpCurr()->data);
+            monoms->Next();
+            i++;
+        }
+        else
+        {
+            if (tmp.monoms->GetpCurr()->Key == monoms->GetpCurr()->Key)
+            {
+                res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, monoms->GetpCurr()->data +
+                    tmp.monoms->GetpCurr()->data);
+                monoms->Next();
+                i++;
+            }
+            else
+                res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
+            tmp.monoms->Next();
+            j++;
+        }
+
+        k++;
+    }
+
     return res;
 };
 

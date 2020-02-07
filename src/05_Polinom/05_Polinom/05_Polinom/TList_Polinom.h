@@ -31,6 +31,7 @@ public:
     TNode<int, float>* GetpFirst() const;
     TNode<int, float>* GetpCurr() const;
     TNode<int, float>* GetpPrev() const;
+    TNode<int, float>* GetpNext() const;
     int Count();
     bool operator==(const TList&) const;
 
@@ -446,6 +447,11 @@ TNode<int, float>* TList<int, float>::GetpFirst() const
 TNode<int, float>* TList<int, float>::GetpCurr() const
 {
     return pCurr;
+};
+
+TNode<int, float>* TList<int, float>::GetpNext() const
+{
+    return pNext;
 };
 
 TNode<int, float>* TList<int, float>::GetpPrev() const
