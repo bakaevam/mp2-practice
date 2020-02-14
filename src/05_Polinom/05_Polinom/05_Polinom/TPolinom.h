@@ -340,62 +340,45 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
 {
     TPolinom res;
 
-    int i = 0;
-    int j = 0;
-    int k = 0;
-    int resLength = (tmp.monoms->Count() + monoms->Count());
-    int firstLength = monoms->Count();
-    int secondLength = tmp.monoms->Count();
-
     tmp.monoms->Reset();
     monoms->Reset();
 
-    while(k < resLength)
-    {
-        if ((tmp.monoms->GetpCurr() == nullptr) && (monoms->GetpCurr() == nullptr))
-        {
-            k++;
-            continue;
-        }
+	while (!tmp.monoms->IsEnded() && !monoms->IsEnded())
+	{
+		if (monoms->GetpCurr()->Key < tmp.monoms->GetpCurr()->Key)
+		{
+			res.monoms->InsertToEnd(monoms->GetpCurr()->Key, monoms->GetpCurr()->data);
+			monoms->Next();
+		}
+		else if (monoms->GetpCurr()->Key > tmp.monoms->GetpCurr()->Key)
+		{
+			res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
+			tmp.monoms->Next();
+		}
+		else 
+		{
+			if ((tmp.monoms->GetpCurr()->data + monoms->GetpCurr()->data) != 0)
+				res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data + monoms->GetpCurr()->data);
+			tmp.monoms->Next();
+			monoms->Next();
+		}
+		res.monoms->Reset();
+	}
 
-        if ((i > firstLength - 1) && (tmp.monoms->GetpCurr() != nullptr))
-        {
-            res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
-            tmp.monoms->Next();
-            j++;
-            continue;
-        }
-        else if ((j > secondLength - 1) && (monoms->GetpCurr() != nullptr))
-        {
-            res.monoms->InsertToEnd(monoms->GetpCurr()->Key, monoms->GetpCurr()->data);
-            monoms->Next();
-            i++;
-             continue;
-        }
+	while (!tmp.monoms->IsEnded())
+	{
+		res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
+		tmp.monoms->Next();
+	}
 
-        if (monoms->GetpCurr()->Key < tmp.monoms->GetpCurr()->Key)
-        {
-                res.monoms->InsertToEnd(monoms->GetpCurr()->Key, monoms->GetpCurr()->data);
-            monoms->Next();
-            i++;
-        }
-        else
-        {
-            if (tmp.monoms->GetpCurr()->Key == monoms->GetpCurr()->Key)
-            {
-                res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, monoms->GetpCurr()->data +
-                    tmp.monoms->GetpCurr()->data);
-                monoms->Next();
-                i++;
-            }
-            else
-                res.monoms->InsertToEnd(tmp.monoms->GetpCurr()->Key, tmp.monoms->GetpCurr()->data);
-            tmp.monoms->Next();
-            j++;
-        }
+	while (!monoms->IsEnded())
+	{
+		res.monoms->InsertToEnd(monoms->GetpCurr()->Key, monoms->GetpCurr()->data);
+		monoms->Next();
+	}
 
-        k++;
-    }
+	monoms->Reset();
+	res.monoms->Reset();
 
     return res;
 };
@@ -403,7 +386,8 @@ TPolinom TPolinom::operator+(const TPolinom& tmp)
 TPolinom TPolinom::operator-(const TPolinom& tmp)
 {
     TPolinom res(tmp);
-    return (*this + (-res));
+	res = -res;
+    return (*this + (res));
 };
 
 TPolinom TPolinom::operator*(const TPolinom& tmp)
