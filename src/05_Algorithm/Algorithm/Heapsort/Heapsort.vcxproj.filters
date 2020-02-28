@@ -19,4 +19,14 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Debug\Heap_Set_Library.lib">
+      <Filter>Файлы ресурсов</Filter>
+    </Library>
+  </ItemGroup>
 </Project>
