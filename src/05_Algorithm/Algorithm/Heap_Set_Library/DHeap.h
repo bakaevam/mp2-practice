@@ -15,6 +15,7 @@ public:
 public:
 	TDHeap();
 	TDHeap(int newMaxSize, int newD, T* newElements, int n);
+	TDHeap(const TDHeap&);
 	~TDHeap();
 
 	void Swap(int a, int b);
@@ -40,16 +41,33 @@ TDHeap<T>::TDHeap()
 template<class T>
 TDHeap<T>::TDHeap(int newMaxSize, int newD, T* newElements, int n)
 {
+	if (n > newMaxSize)
+		return;
 	max_size = newMaxSize;
 	d = newD;
+	size = n;
+	elements = new T[max_size];
 	memcpy(elements, newElements, sizeof(T) * n);
+};
+
+template<class T>
+TDHeap<T>::TDHeap(const TDHeap& tmp)
+{
+	max_size = tmp.max_size;
+	size = tmp.size;
+	d = tmp.d;
+
+	elements = new T[max_size];
+
+	for (int i = 0; i < size; i++)
+		elements[i] = tmp.elements[i];
 };
 
 template<class T>
 TDHeap<T>::~TDHeap()
 {
 	max_size = 0;
-	delete elements;
+	delete[] elements;
 	size = 0;
 	d = 0;
 };
@@ -65,9 +83,9 @@ void TDHeap<T>::Swap(int a, int b)
 template<class T>
 void TDHeap<T>::SiftUp(int a)
 {
+	int parent = (a - 1) / d;
 	while (a > 0)
 	{
-		int parent = (a - 1) / d;
 		if (elements[parent] > elements[a])
 		{
 			Swap(parent, a);
@@ -81,16 +99,17 @@ template<class T>
 int TDHeap<T>::MinChild(int a)
 {
 	//Если a - это лист
-	if (a * d + 1 >= size)
+	if ((a * d + 1) >= size)
 		return -1;
 
 	int c1 = a * d + 1;
 	int c2 = fmin(size - 1, a * d + d);
 	int c = c1;
 
-	for (int i = c1; i < c2; i++)
-		if (elements[i] < elements[c])
+	for (int i = c1; i <= c2; i++)
+		if (elements[i] > elements[c])
 			c = i;
+
 	return c;
 };
 
@@ -124,8 +143,7 @@ void TDHeap<T>::Hilling()
 template<class T>
 ostream& operator<<(ostream& os, TDHeap<T>& tmp)
 {
-	os << " d = " << tmp.d << endl;;
-
+	os << endl;
 	for (int i = 0; i < tmp.size; i++)
 		os << " " << tmp.elements[i];
 	return os;

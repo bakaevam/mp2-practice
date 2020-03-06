@@ -23,9 +23,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Heapsort.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\Debug\Heap_Set_Library.lib">
+    <Library Include="..\x64\Debug\Heap_Set_Library.lib">
       <Filter>Файлы ресурсов</Filter>
     </Library>
   </ItemGroup>
