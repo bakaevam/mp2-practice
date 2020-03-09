@@ -14,19 +14,17 @@ void Heapsort<T>::HeapSort(T*& a, int n)
 {
 	TDHeap<int> heap(10, 2, a, n);
 	heap.Hilling();
-	cout << heap;
 
 	for(int i = (n - 1); i >= 0; i--)
 	{
-		heap.Swap(n - 1, 0);
-		n--;
+		heap.Swap(heap.GetSize() - 1, 0);
+		heap.ChangeSize(-1);
 		heap.SiftDown(0);
-		cout << heap;
 	};
 
 	cout << heap;
 	for (int i = 0; i < n; i++)
-		a[i] = heap.elements[i];
+		a[i] = heap.GetElements()[i];
 };
 
 #endif

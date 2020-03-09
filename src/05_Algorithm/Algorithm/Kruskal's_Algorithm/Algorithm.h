@@ -4,10 +4,7 @@
 class Kruskal
 {
 public:
-	Kruskal() {};
-	~Kruskal() {};
-
-
+	static void KruskalAlg();
 };
 
 #endif 

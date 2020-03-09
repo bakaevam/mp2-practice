@@ -7,7 +7,7 @@ using namespace std;
 template<class T>
 class TDHeap
 {
-public:
+private:
 	int max_size;
 	int size;
 	int d;
@@ -24,6 +24,9 @@ public:
 	void SiftDown(int a);
 	void DeleteMin();
 	void Hilling();
+	int GetSize() const;
+	T* GetElements() const;
+	void ChangeSize(int a);
 
 	template<class T>
 	friend ostream& operator<<(ostream& os, TDHeap& tmp);
@@ -107,7 +110,7 @@ int TDHeap<T>::MinChild(int a)
 	int c = c1;
 
 	for (int i = c1; i <= c2; i++)
-		if (elements[i] > elements[c])
+		if (elements[i] < elements[c])
 			c = i;
 
 	return c;
@@ -144,9 +147,27 @@ template<class T>
 ostream& operator<<(ostream& os, TDHeap<T>& tmp)
 {
 	os << endl;
-	for (int i = 0; i < tmp.size; i++)
-		os << " " << tmp.elements[i];
+	for (int i = 0; i < tmp.GetSize(); i++)
+		os << " " << tmp.GetElements()[i];
 	return os;
+};
+
+template<class T>
+int TDHeap<T>::GetSize() const
+{
+	return size;
+};
+
+template<class T>
+T* TDHeap<T>::GetElements() const
+{
+	return elements;
+};
+
+template<class T>
+void TDHeap<T>::ChangeSize(int a)
+{
+	size += a;
 };
 
 #endif

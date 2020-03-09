@@ -15,9 +15,13 @@ void main()
 		a[i] = rand() % 10;
 	}
 
+	//Вывод нового массива
+	for (int i = 0; i < 5; i++)
+		cout << " " << a[i];
+
 	Heapsort<int>::HeapSort(a, 5);
 	
-	cout << endl;
+	//Вывод отсортированного массива
 	for(int i = 0; i < 5; i++)
 		cout << " " << a[i];
 }
