@@ -1,0 +1,48 @@
+#include "Kruskal.h"
+#include "../Heap_Set_Library/DHeap.h"
+
+int Kruskal::KruskalAlg(const Graph& graph)
+{
+	Set nodeSet(graph.GetNodes(), graph.GetSize());
+
+	//Create n singletons
+	for (int i = 0; i < graph.GetSize(); i++)
+	{
+		nodeSet.CreateSingleton(graph.GetNodes()[i]);
+	}
+
+	//Create queue
+	TDHeap<Edge> heapEdge(graph.GetCountEdges(), 2, graph.GetEdges(), graph.GetCountEdges());
+	heapEdge.Hilling();
+
+	//Create empty set of edges, which are included in ostav tree
+	Edge* edgeSet = new Edge[graph.GetCountEdges()];
+	int edgeSetSize = 0;
+
+	while ((edgeSetSize != (graph.GetSize() - 1)) && (graph.GetCountEdges() != 0))
+	{
+		//Take edge with min weught
+		Edge e = heapEdge.GetElements()[0];
+
+		//Find subset A, which is had begin of edge
+		int subsetA = nodeSet.Find(e.begin);
+
+		//Find subset B, which is had end of edge
+		int subsetB = nodeSet.Find(e.end);
+
+		//Combine A and B subsets, put edge e in edgeSet
+		if (subsetA != subsetB)
+		{
+			nodeSet.Combination(subsetA, subsetB);
+			edgeSet[edgeSetSize++] = e;
+
+			cout << endl;
+			for (int i = 0; i < edgeSetSize; i++)
+				cout << endl << edgeSet[i].begin << " - " << edgeSet[i].end;
+		}
+
+		heapEdge.DeleteMin();
+	}
+
+	return 7;
+};

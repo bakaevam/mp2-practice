@@ -1,5 +1,6 @@
 #ifndef _DHEAP_H_
 #define _DHEAP_H_
+#include "Edge.h"
 #include <iostream>
 #include <math.h>
 using namespace std;
@@ -36,7 +37,7 @@ template<class T>
 TDHeap<T>::TDHeap()
 {
 	max_size = 20;
-	elements = new T(max_size);
+	elements = new T[max_size];
 	size = 0;
 	d = 0;
 };
@@ -50,7 +51,9 @@ TDHeap<T>::TDHeap(int newMaxSize, int newD, T* newElements, int n)
 	d = newD;
 	size = n;
 	elements = new T[max_size];
-	memcpy(elements, newElements, sizeof(T) * n);
+	
+	for (int i = 0; i < size; i++)
+		elements[i] = newElements[i];
 };
 
 template<class T>
@@ -70,7 +73,7 @@ template<class T>
 TDHeap<T>::~TDHeap()
 {
 	max_size = 0;
-	delete[] elements;
+	elements = nullptr;
 	size = 0;
 	d = 0;
 };

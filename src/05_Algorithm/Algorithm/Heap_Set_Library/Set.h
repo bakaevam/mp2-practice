@@ -6,6 +6,7 @@ class Set
 {
 private:
 	int size;
+	int currentSize;
 	int* elements;
 public:
 	Set();
@@ -16,6 +17,7 @@ public:
 	void CreateSingleton(int);
 	void Combination(int, int);
 	int Find(int);
+	int GetSize() const;
 };
 
 #endif

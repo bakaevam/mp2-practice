@@ -138,7 +138,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="Kruskal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Kruskal.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Heap_Set_Library\Heap_Set_Library.vcxproj">
+      <Project>{44556015-ea8b-4440-bf19-5622ba570a17}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\x64\Debug\Heap_Set_Library.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
