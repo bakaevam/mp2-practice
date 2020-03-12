@@ -33,5 +33,12 @@ void main()
     }
 
     Graph gr(m_sm, nodesCount);
-    int ostavTree = Kruskal::KruskalAlg(gr);
+    TDHeap<Edge> ostavTree = Kruskal::KruskalAlg(gr);
+
+    for (int i = 0; i < ostavTree.GetSize(); i++)
+    {
+        cout << endl << ostavTree.GetElements()[i].GetBegin();
+        cout << " - " << ostavTree.GetElements()[i].GetEnd();
+        cout << " w = " << ostavTree.GetElements()[i].GetWeight();
+    }
  }

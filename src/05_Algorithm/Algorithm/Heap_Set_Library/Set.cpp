@@ -3,10 +3,9 @@
 Set::Set(const Set& copy)
 {
 	size = copy.size;
-	currentSize = copy.currentSize;
 	elements = new int[size];
 
-	for (int i = 0; i < currentSize; i++)
+	for (int i = 0; i < size; i++)
 		elements[i] = copy.elements[i];
 };
 
@@ -19,10 +18,18 @@ Set::Set(int* tmp, int n)
 		elements[i] = tmp[i];
 };
 
+Set::Set(int _size)
+{
+	size = _size;
+	elements = new int[size];
+
+	for (int i = 0; i < size; i++)
+		elements[i] = -1;
+};
+
 Set::~Set()
 {
 	size = 0;
-	currentSize = 0;
 	delete[] elements;
 };
 

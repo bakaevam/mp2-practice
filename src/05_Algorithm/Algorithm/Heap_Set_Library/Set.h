@@ -1,16 +1,15 @@
 #ifndef _SET_H_
 #define _SET_H_
 
-
 class Set
 {
 private:
 	int size;
-	int currentSize;
 	int* elements;
 public:
 	Set(const Set&);
 	Set(int*, int);
+	Set(int);
 	~Set();
 
 	void CreateSingleton(int);

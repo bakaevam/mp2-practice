@@ -33,7 +33,7 @@ Graph::Graph(int* matrix, int _size)
 	nodes = new int[size];
 
 	for (int i = 0; i < size; i++)
-		nodes[i] = i + 1;
+		nodes[i] = i;
 
 	for(int i = 0; i < size; i++)
 		for (int j = 0; j < i; j++)
@@ -52,8 +52,8 @@ Graph::Graph(int* matrix, int _size)
 			{
 				if (matrix[i * size + j] == 1)
 				{
-					edges[k].begin = i + 1;
-					edges[k].end = j + 1;
+					edges[k].begin = i;
+					edges[k].end = j;
 					k++;
 				}
 

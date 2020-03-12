@@ -7,7 +7,7 @@
 class Kruskal
 {
 public:
-	static int KruskalAlg(const Graph&);
+	static TDHeap<Edge> KruskalAlg(const Graph&);
 };
 
 #endif 

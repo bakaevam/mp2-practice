@@ -1,9 +1,9 @@
 #include "Kruskal.h"
 #include "../Heap_Set_Library/DHeap.h"
 
-int Kruskal::KruskalAlg(const Graph& graph)
+TDHeap<Edge> Kruskal::KruskalAlg(const Graph& graph)
 {
-	Set nodeSet(graph.GetNodes(), graph.GetSize());
+	Set nodeSet(graph.GetSize());
 
 	//Create n singletons
 	for (int i = 0; i < graph.GetSize(); i++)
@@ -19,7 +19,7 @@ int Kruskal::KruskalAlg(const Graph& graph)
 	Edge* edgeSet = new Edge[graph.GetCountEdges()];
 	int edgeSetSize = 0;
 
-	while ((edgeSetSize != (graph.GetSize() - 1)) && (graph.GetCountEdges() != 0))
+	while ((edgeSetSize != (graph.GetSize() - 1)) && (heapEdge.GetSize() != 0))
 	{
 		//Take edge with min weught
 		Edge e = heapEdge.GetElements()[0];
@@ -35,14 +35,12 @@ int Kruskal::KruskalAlg(const Graph& graph)
 		{
 			nodeSet.Combination(subsetA, subsetB);
 			edgeSet[edgeSetSize++] = e;
-
-			cout << endl;
-			for (int i = 0; i < edgeSetSize; i++)
-				cout << endl << edgeSet[i].GetBegin() << " - " << edgeSet[i].GetEnd();
 		}
 
 		heapEdge.DeleteMin();
 	}
 
-	return 7;
+	TDHeap<Edge> ostavTree(edgeSetSize, 2, edgeSet, edgeSetSize);
+
+	return ostavTree;
 };
