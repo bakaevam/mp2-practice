@@ -37,7 +37,6 @@ template<class T>
 TDHeap<T>::TDHeap()
 {
 	max_size = 20;
-	elements = new T[max_size];
 	size = 0;
 	d = 0;
 };
@@ -50,10 +49,9 @@ TDHeap<T>::TDHeap(int newMaxSize, int newD, T* newElements, int n)
 	max_size = newMaxSize;
 	d = newD;
 	size = n;
-	elements = new T[max_size];
 	
-	for (int i = 0; i < size; i++)
-		elements[i] = newElements[i];
+	//for (int i = 0; i < size; i++)
+		elements = newElements;
 };
 
 template<class T>
@@ -62,8 +60,6 @@ TDHeap<T>::TDHeap(const TDHeap& tmp)
 	max_size = tmp.max_size;
 	size = tmp.size;
 	d = tmp.d;
-
-	elements = new T[max_size];
 
 	for (int i = 0; i < size; i++)
 		elements[i] = tmp.elements[i];

@@ -25,10 +25,10 @@ int Kruskal::KruskalAlg(const Graph& graph)
 		Edge e = heapEdge.GetElements()[0];
 
 		//Find subset A, which is had begin of edge
-		int subsetA = nodeSet.Find(e.begin);
+		int subsetA = nodeSet.Find(e.GetBegin());
 
 		//Find subset B, which is had end of edge
-		int subsetB = nodeSet.Find(e.end);
+		int subsetB = nodeSet.Find(e.GetEnd());
 
 		//Combine A and B subsets, put edge e in edgeSet
 		if (subsetA != subsetB)
@@ -38,7 +38,7 @@ int Kruskal::KruskalAlg(const Graph& graph)
 
 			cout << endl;
 			for (int i = 0; i < edgeSetSize; i++)
-				cout << endl << edgeSet[i].begin << " - " << edgeSet[i].end;
+				cout << endl << edgeSet[i].GetBegin() << " - " << edgeSet[i].GetEnd();
 		}
 
 		heapEdge.DeleteMin();

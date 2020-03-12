@@ -9,7 +9,6 @@ private:
 	int currentSize;
 	int* elements;
 public:
-	Set();
 	Set(const Set&);
 	Set(int*, int);
 	~Set();

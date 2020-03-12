@@ -1,12 +1,5 @@
 #include "Set.h"
 
-Set::Set()
-{
-	size = 0;
-	currentSize = 0;
-	elements = new int();
-};
-
 Set::Set(const Set& copy)
 {
 	size = copy.size;
@@ -20,7 +13,6 @@ Set::Set(const Set& copy)
 Set::Set(int* tmp, int n)
 {
 	size = n;
-	currentSize = 0;
 	elements = new int[size];
 
 	for (int i = 0; i < size; i++)
@@ -31,7 +23,7 @@ Set::~Set()
 {
 	size = 0;
 	currentSize = 0;
-	delete elements;
+	delete[] elements;
 };
 
 void Set::CreateSingleton(int a)

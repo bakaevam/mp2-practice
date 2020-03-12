@@ -44,3 +44,18 @@ const Edge& Edge::operator=(const Edge& tmp)
 
 	return *this;
 };
+
+int Edge::GetBegin() const
+{
+	return begin;
+};
+
+int Edge::GetEnd() const
+{
+	return end;
+};
+
+int Edge::GetWeight() const
+{
+	return weight;
+};

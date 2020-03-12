@@ -71,8 +71,8 @@ Graph::~Graph()
 {
 	size = 0;
 	countEdges = 0;
-	delete nodes;
-	delete edges;
+	delete[] nodes;
+	delete[] edges;
 };
 
 int Graph::GetSize() const
