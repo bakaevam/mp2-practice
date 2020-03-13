@@ -6,19 +6,19 @@ class Edge
 private:
 	int begin;
 	int end;
-	int weight;
+	float weight;
 
 public:
 	Edge();
 	Edge(const Edge&);
-	Edge(int, int, int);
+	Edge(int, int, float);
 	~Edge();
 
 	bool operator<(const Edge&) const;
 	const Edge& operator=(const Edge&);
 	int GetBegin() const;
 	int GetEnd() const;
-	int GetWeight() const;
+	float GetWeight() const;
 
 	friend class Graph;
 };

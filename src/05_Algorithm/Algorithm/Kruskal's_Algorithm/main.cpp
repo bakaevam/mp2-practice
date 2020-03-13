@@ -41,4 +41,6 @@ void main()
         cout << " - " << ostavTree.GetElements()[i].GetEnd();
         cout << " w = " << ostavTree.GetElements()[i].GetWeight();
     }
+
+	delete[] m_sm;
  }

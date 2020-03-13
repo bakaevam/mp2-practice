@@ -8,20 +8,37 @@ using namespace std;
 
 void main()
 {
-	int* a = new int[5];
+	int sizeArr = 0;
+	int rangeA = 0;
+	int rangeB = 0;
 	srand((unsigned int)time(NULL));
-	for (int i = 0; i < 5; i++)
+
+	cout << "Enter size of array ";
+	cin >> sizeArr; 
+
+	cout << "Enter beginning of range ";
+	cin >> rangeA;
+
+	cout << "Enter ending of range ";
+	cin >> rangeB;
+
+	float* a = new float[sizeArr];
+
+	for (int i = 0; i < sizeArr; i++)
 	{
-		a[i] = rand() % 10;
+		a[i] = rand() % rangeB + rangeA;
 	}
 
 	//Вывод нового массива
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < sizeArr; i++)
 		cout << " " << a[i];
 
-	Heapsort<int>::HeapSort(a, 5);
+	cout << endl; 
+	Heapsort<float>::HeapSort(a, sizeArr);
 	
 	//Вывод отсортированного массива
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < sizeArr; i++)
 		cout << " " << a[i];
+
+	delete[] a;
 }

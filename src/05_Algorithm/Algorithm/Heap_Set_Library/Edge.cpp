@@ -14,7 +14,7 @@ Edge::Edge(const Edge& copy)
 	weight = copy.weight;
 };
 
-Edge::Edge(int _begin, int _end, int _weight)
+Edge::Edge(int _begin, int _end, float _weight)
 {
 	begin = _begin;
 	end = _end;
@@ -55,7 +55,7 @@ int Edge::GetEnd() const
 	return end;
 };
 
-int Edge::GetWeight() const
+float Edge::GetWeight() const
 {
 	return weight;
 };

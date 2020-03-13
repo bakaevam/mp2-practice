@@ -12,17 +12,12 @@ public:
 template<class T>
 void Heapsort<T>::HeapSort(T*& a, int n)
 {
-	TDHeap<int> heap(10, 2, a, n);
+	TDHeap<float> heap(10, 2, a, n);
 	heap.Hilling();
 
-	for(int i = (n - 1); i >= 0; i--)
-	{
-		heap.Swap(heap.GetSize() - 1, 0);
-		heap.ChangeSize(-1);
-		heap.SiftDown(0);
-	};
+	for(int i = 0; i < n; i++)
+		heap.DeleteMin();
 
-	cout << heap;
 	for (int i = 0; i < n; i++)
 		a[i] = heap.GetElements()[i];
 };
