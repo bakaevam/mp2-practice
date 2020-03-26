@@ -1,14 +1,14 @@
 #include "Kruskal.h"
 #include "../Heap_Set_Library/DHeap.h"
 
-TDHeap<Edge> Kruskal::KruskalAlg(const Graph& graph)
+void Kruskal::KruskalAlg(const Graph& graph, TDHeap<Edge>& result)
 {
 	Set nodeSet(graph.GetSize());
 
 	//Create n singletons
 	for (int i = 0; i < graph.GetSize(); i++)
 	{
-		nodeSet.CreateSingleton(graph.GetNodes()[i]);
+		nodeSet.CreateSingleton(i);
 	}
 
 	//Create queue
@@ -41,6 +41,5 @@ TDHeap<Edge> Kruskal::KruskalAlg(const Graph& graph)
 	}
 
 	TDHeap<Edge> ostavTree(edgeSetSize, 2, edgeSet, edgeSetSize);
-
-	return ostavTree;
+	result = ostavTree;
 };

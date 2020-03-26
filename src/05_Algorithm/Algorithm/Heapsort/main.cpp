@@ -1,12 +1,12 @@
 #include <iostream>
 #include "../Heap_Set_Library/DHeap.h"
-#include "Heapsort.h"
+#include "../Heap_Set_Library/Heapsort.h"
 #include <ctime>
 #include <conio.h>
 #include <stdlib.h>
 using namespace std;
 
-void main()
+int main()
 {
 	int sizeArr = 0;
 	int rangeA = 0;
@@ -26,7 +26,7 @@ void main()
 
 	for (int i = 0; i < sizeArr; i++)
 	{
-		a[i] = rand() % rangeB + rangeA;
+		a[i] = (float)(rand() % rangeB + rangeA);
 	}
 
 	//Вывод нового массива

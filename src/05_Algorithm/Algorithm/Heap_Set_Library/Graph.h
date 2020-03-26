@@ -4,6 +4,8 @@
 #include "Set.h"
 #include "Edge.h"
 
+using namespace std;
+
 class Graph
 {
 private:
@@ -16,7 +18,6 @@ public:
 	Graph();
 	Graph(const Graph&);
 	Graph(int* matrix, int size);
-	//Graph(int* list, int size);
 	~Graph();
 
 	int GetSize() const;
@@ -24,5 +25,8 @@ public:
 	Edge* GetEdges() const;
 	int GetCountEdges() const;
 	void SetCountEdges(int);
+	bool IsConnected() const;
+
+	friend istream& operator>>(istream& in, Graph& gr);
 };
 #endif

@@ -2,14 +2,15 @@
 #include "Set.h"
 #include "Edge.h"
 #include <iostream>
+#include <conio.h>
+#include <queue>
+#include "Exception.h"
 using namespace std;
 
 Graph::Graph()
 {
 	size = 0;
 	countEdges = 0;
-	nodes = new int[size];
-	edges = new Edge();
 };
 
 Graph::Graph(const Graph& copy)
@@ -98,4 +99,86 @@ int Graph::GetCountEdges() const
 void Graph::SetCountEdges(int a)
 {
 	countEdges = a;
+};
+
+bool Graph::IsConnected() const
+{
+	//Создание списка смежности
+	vector<vector<int>> gr(size);
+	for (int i = 0; i < countEdges; i++)
+	{
+		gr[edges[i].begin].push_back(edges[i].end);
+		gr[edges[i].end].push_back(edges[i].begin);
+	};
+
+	int visitedV = 1;
+	vector<bool> visit(size);
+	visit[0] = true;
+
+	queue<int> q;
+	q.push(0); // Очередь текущих вершин
+
+	while (!q.empty())
+	{
+		int v = q.front();
+		q.pop();
+		for (int i = 0; i < gr[v].size(); i++) //Просмотр всех ребер из текущей вершины
+		{
+			int curV = gr[v][i];
+			if (!visit[curV])
+			{
+				visit[curV] = true;
+				q.push(curV);
+			}
+		}
+	}
+
+	int _size = 0;
+	for (int i = 0; i < size; i++)
+		if (visit[i] == true)
+			_size++;
+
+	if (_size != size)
+		return false;
+	else return true;
+};
+
+istream& operator>>(istream& in, Graph& gr)
+{
+	cout << "Enter count of vertexes: ";
+	cin >> gr.size;
+
+	cout << " Enter count of edges: ";
+	cin >> gr.countEdges;
+
+	gr.edges = new Edge[gr.countEdges];
+
+	for(int i = 0; i < gr.countEdges; i++)
+	{
+		int begin = 0;
+		int end = 0;
+		float weight = 0;
+
+		do
+		{
+			cout << "\nEdge " << i << "\n Begin: ";
+			cin >> begin;
+			cout << " End: ";
+			cin >> end;
+			cout << " Weight = ";
+			cin >> weight;
+
+		} while ((begin < 0) || (begin >= gr.size)
+			|| (end < 0) || (end >= gr.size)
+			|| (weight < 0) || (begin == end));
+
+		cout << endl;
+		gr.edges[i] = Edge(begin, end, weight);
+	};
+
+	//Сonnectivity test
+	if (!gr.IsConnected())
+		throw Exception_errors(" Graph isn't connected!");
+
+	return in;
 };
